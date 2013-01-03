@@ -1,0 +1,613 @@
+@import "colors";
+@import "mixins";
+
+// --------------------
+// CORE
+// --------------------
+
+#chart {
+  width: 938px;
+  height: 300px;
+  overflow: hidden;
+}
+
+#chart-container {
+  border: 1px solid #E6E6E6;
+  margin-top: 20px;
+  position: relative;
+  .uncategorized {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px;
+    z-index: 1;
+    border-left: 1px solid #E6E6E6;
+    border-bottom: 1px solid #E6E6E6;
+    background: #fff;
+  }
+  .empty {
+    background: #F2F2F3;
+    color: #9B9DA1;
+    font-weight: bold;
+    height: 150px;
+    font-size: 18px;
+    line-height: 18px;
+    padding-top: 132px;
+    text-align: center;
+    width: 938px;
+  }
+}
+
+/* graph */
+.chart-container {
+  position: relative;
+}
+
+.chart-widget {
+  padding-left: 0;
+  
+}
+
+.main-d3-chart.graph-container {
+  left: 15px;
+}
+
+.graph-container svg * {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  
+  /*
+  Introduced in IE 10.
+  See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Specific rules for mini-charts */
+.mini-chart-container.graph-container {
+  .gauge {
+    path {
+      stroke: none;
+    }
+  }
+  
+  path {
+    stroke: $primary;
+    stroke-width: 2;
+  }
+  rect {
+    stroke-width: .3;
+    stroke: white;
+    fill: $primary;
+  }
+}
+
+.mini-chart-container {
+  height: 38px;
+}
+
+.metric-inner-container {
+  height: 225px;
+  
+  .bar {
+    fill: $primary;
+  }
+}
+
+.metric-inner-container, .graph-container {
+  position: relative;
+  
+  svg {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+// --------------------
+// COMPONENTS
+// --------------------
+
+
+/* axes */
+
+.y-ticks {
+  /* Don't display first tick of Y-axis */
+  g:first-child {
+    opacity: 0 !important;
+  }
+  
+  &.plain {
+    path {
+      fill: none;
+      stroke: none;
+    }
+    
+    .tick {
+      stroke: none;
+    }
+  }
+  path {
+    fill: none;
+    stroke: #808080;
+  }
+  
+  .tick {
+    stroke: rgba(0, 0, 0, 0.16);
+    stroke-width: 2px;
+    shape-rendering: crisp-edges;
+    pointer-events: none;
+  }
+}
+
+.y-grid {
+  .tick {
+    z-index: -1;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-width: 1px;
+    stroke-dasharray: 1 1;
+  }
+  path {
+    fill: none;
+    stroke: none;
+  }
+}
+
+.y-ticks text {
+  opacity: 0.5;
+  pointer-events: none;
+  fill: black;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.x-tick {
+  &.grid {
+    border-left: 1px dotted rgba(0, 0, 0, 0.2);
+  }
+  
+  fill: black;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0px;
+  pointer-events: none;
+  
+  .title {
+    position: absolute;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    opacity: 0.5;
+    white-space: nowrap;
+    margin-left: 3px;
+    bottom: -10px;
+    text-anchor: middle;
+    left: -12px;
+    
+    
+  }
+  
+  &.align-end .title {
+    text-anchor: end;
+  }
+  
+  &.align-start .title {
+    text-anchor: start;
+  }
+  
+  &.align-start .title {
+    text-anchor: middle;
+  }
+}
+
+
+.x-tick.glow .title, .y-ticks.glow text {
+  fill: black;
+  color: black;
+  text-shadow: -1px 1px 0 rgba(255, 255, 255, 0.1), 
+  1px -1px 0 rgba(255, 255, 255, 0.1), 
+  1px 1px 0 rgba(255, 255, 255, 0.1), 
+  0px 1px 0 rgba(255, 255, 255, 0.1), 
+  0px -1px 0 rgba(255, 255, 255, 0.1), 
+  1px 0px 0 rgba(255, 255, 255, 0.1), 
+  -1px 0px 0 rgba(255, 255, 255, 0.1), 
+  -1px -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.x-tick.inverse .title, .y-ticks.inverse text {
+  fill: white;
+  color: white;
+  text-shadow: -1px 1px 0 rgba(0, 0, 0, 0.8), 
+  1px -1px 0 rgba(0, 0, 0, 0.8), 
+  1px 1px 0 rgba(0, 0, 0, 0.8), 
+  0px 1px 0 rgba(0, 0, 0, 0.8), 
+  0px -1px 0 rgba(0, 0, 0, 0.8), 
+  1px 0px 0 rgba(0, 0, 0, 0.8), 
+  -1px 0px 0 rgba(0, 0, 0, 0.8), 
+  -1px -1px 0 rgba(0, 0, 0, 0.8);
+}
+
+#y-axis {
+  position: absolute;
+  bottom: 0;
+  width: 20px;
+  left: 5px;
+}
+
+.y-axis {
+  fill: none;
+}
+
+.axis {
+  &.yAxis, &.xAxis {
+    @include data-label();
+  }
+  
+  &.yAxis {
+    line, path {
+      stroke: $grey;
+      stroke-width: 2px;
+    }
+    
+    .domain {
+      stroke: none;
+    }
+  }
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.xAxis.axis {
+  line {
+    stroke: #fff;
+  }
+  
+  .minor {
+    stroke-opacity: .5;
+  }
+  
+  path {
+    display: none;
+  }
+}
+
+.yAxis.axis line, .yAxis.axis path {
+  fill: none;
+  stroke: #000;
+}
+
+/* legend */
+
+#main-chart-legend {
+  .well {
+    display: inline-block;
+    padding: 5px;
+  }
+  
+  .chart-legend {
+    margin: 1px 0 0 15px;
+    padding: 5px 0 0 0;
+    list-style: none;
+    
+    @include clearfix;
+    
+    li {
+      float: left;
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+      margin: 0 15px 5px 0;
+      
+      span {
+        display: inline-block;
+        position: relative;
+        top: -2px;
+        margin: 0 6px 0 0;
+        width: 6px;
+        height: 6px;
+        border-radius: 1em;
+        box-shadow: 1px 1px 0 rgba(255,255,255,0.8),
+        inset 1px 1px 1px rgba(0,0,0,0.2);
+        &.point-noise { background-color: $grey }
+        &.point-dogs { background-color: $danger }
+        &.point-sprouts { background-color: $info }
+        &.point-stars { background-color: $success }
+      }
+    }
+  }
+}
+
+.chart-legend {
+  margin: 0 0 10px 10px;
+  color: $heading-black;
+  overflow: hidden;
+  
+  .legend-item {
+    float: left;
+    overflow: hidden;
+    margin-right: 10px;
+    .color, .text {
+      float: left;
+    }
+    .color {
+      width: 14px;
+      height: 14px;
+      border: 1px solid #E6E6E6;
+      margin-right: 8px;
+    }
+    .text {
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+}
+
+
+/* hover detail */
+
+.metric-inner-container .detail, .graph-container .detail {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.1);
+  bottom: 0;
+  width: 1px;
+  @include transition(opacity 0.25s linear);
+  &.inactive {
+    opacity: 0;
+  }
+  
+  &.no-line {
+    background: none;
+  }
+  
+  .item.active {
+    opacity: 1;
+  }
+  
+  .x_label {
+    font-family: Arial, sans-serif;
+    border-radius: 3px;
+    padding: 6px;
+    opacity: 0.5;
+    border: 1px solid #e0e0e0;
+    font-size: 12px;
+    position: absolute;
+    background: white;
+    white-space: nowrap;
+  }
+  .item {
+    text-transform: none;
+    position: absolute;
+    z-index: 2;
+    border-radius: 3px;
+    padding: 0.25em;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    margin-left: 1em;
+    margin-top: -1em;
+    white-space: nowrap;
+    &.active {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.8);
+    }
+    &:before {
+      content: "\25c2";
+      position: absolute;
+      left: -0.5em;
+      color: rgba(0, 0, 0, 0.7);
+      width: 0;
+    }
+  }
+  .dot {
+    width: 4px;
+    height: 4px;
+    margin-left: -3px;
+    margin-top: -4px;
+    border-radius: 5px;
+    position: absolute;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+    background: white;
+    border-width: 2px;
+    border-style: solid;
+    display: none;
+    background-clip: padding-box;
+    &.active {
+      display: block;
+    }
+  }
+}
+
+.graph-container {
+  .tooltip {
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+  
+  .tooltip.right {
+    padding-left: 5px;
+    margin-left: 10px;
+    margin-top: -11px;
+  }
+}
+
+
+
+// --------------------
+// SERIES TYPES
+// --------------------
+
+/* sankey */
+
+.sankey-chart {
+  .node {
+    stroke: #fff;
+    stroke-width: 2px;
+  }
+  
+  .link {
+    fill: none;
+    stroke: #000;
+    opacity: .3;
+  }
+  .link.on {
+    stroke: #F00;
+    opacity: .7;
+  }
+  
+  .node {
+    stroke: none;
+  }
+}
+
+// SCATTER
+
+/* ScatterChart stylings */
+/* Designers: I used an SVG viewbox to dynamically resize the chart  */
+/* http://www.w3.org/TR/SVG/coords.html#ViewBoxAttribute */
+/* You may find a better way to resize dynamically. */
+/* Please don't hesitate to contact me for any info: esbullington on github */
+
+.scatter {
+  circle {
+    &.low { fill: $danger }
+    &.mid { fill: $info }
+    &.high { fill: $success }
+  }
+}
+
+.graph-container circle.tip-hovered {
+  stroke-width: 1;
+}
+
+.draggable-node-chart, .draggableLine {
+  circle.selected, circle:hover {
+    fill: $alloy-orange-60;
+  }
+}
+
+rect.colorless {
+  fill: $blue-40;
+}
+
+
+
+// LINE
+
+.ui-button {
+  border: 1px solid $grey;
+  padding: 5px;
+}
+
+
+path {
+  &.colorless {
+    stroke: $blue-30;
+  }
+  
+  &.sparkline {
+    stroke: $primary;
+    stroke-width: 1px;
+    fill: none;
+  }
+  &.line {
+    fill: none;
+    stroke-width: 2px;
+  }
+  &.area {
+    fill: #e7e7e7;
+  }
+}
+
+
+div.tipsy.help-tip.seg-tipsy .tipsy-inner div {
+  padding: 6px;
+}
+
+
+/* Leaderboard */
+
+.leaderboard {
+  &.label {
+    fill: $grey;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  &.value {
+    font-size: 27px;
+    fill: darken($grey, 40%);
+    text-anchor: end;
+    
+    @include proxima-800();
+  }
+  
+  &.change {
+    fill: $grey;
+    font-size: 12px;
+    
+    @include proxima-bold();
+  }
+  
+  .triangle-down {
+    fill: $danger;
+    stroke: none;
+  }
+  
+  .triangle-up {
+    fill: $success;
+    stroke: none;
+  }
+  
+  &.track {
+    fill: lighten($grey, 25%);
+    stroke: none;
+  }
+  
+  &.bar {
+    fill: $primary;
+    stroke: none;
+  }
+}
+
+/* Gauge */
+
+.gauge {
+  &.arc {
+    fill: lighten($grey, 25%);
+  }
+  
+  &.arc-value {
+    fill: $primary;
+  }
+  
+  &.pointer-circle {
+    fill: $lighter-grey;
+    stroke: $heading-grey;
+  }
+  
+  &.pointer, &.pointer-nail {
+    stroke: none;
+    fill: darken($grey, 35%);
+  }
+  
+  &.label {
+    font-size: 27px;
+    fill: darken($grey, 40%);
+    text-anchor: middle;
+    
+    @include proxima-800();
+  }
+}
+
+

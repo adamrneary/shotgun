@@ -1,0 +1,29 @@
+{
+  "name": "shotgun",
+  "version": "0.0.1",
+  "author": "Activecell",
+  "homepage": "https://github.com/activecell/shotgun",
+  "description": "A bad-ass backbone application loader.",
+  "author":{
+      "name": "Activecell",
+      "email": "activecell.com"
+    },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/activecell/shotgun"
+  },
+  "keywords": [
+    "d3"
+  ],
+  "dependencies" : {
+    "d3"   :  "2.x.x"
+  },
+  "noAnalyze": true,
+  "devDependencies": {
+    "grunt"    :  "0.3.11",
+    "grunt-coffee"    :  "0.0.2",
+    "grunt-compass" :  "0.3.7",
+    "grunt-contrib-copy" :  "0.3.2"
+  },
+  "license": "NONE"
+}
