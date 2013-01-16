@@ -1,0 +1,45 @@
+<div style='text-align: center;'>
+    <h3><%=entity%>s</h3>
+    <br />
+</div>
+<div style='text-align: center;'>
+    <button class="btn btn-small btn-success pull-left toggle-active" type="button"><%=active%></button>
+    <button class="btn btn-small inline pag pag-left" pag=prev type="button"><i class="icon-arrow-left"></i></button>
+    <span class="pageCur"><%=page%></span> of
+    <span class="pageCount"><%=pageCount%></span>
+    <button class="btn btn-small inline pag pag-right" pag=next type="button"><i class="icon-arrow-right"></i></button>
+    <button class="btn btn-small btn-danger pull-right deleteAll" type="button"><i class="icon-remove"></i> Delete all</button>
+</div>
+<br>
+<table class="table">
+    <thead>
+        <!--<th>id</th>-->
+        <th>name</th>
+        <th>url</th>
+        <th>shot description</th>
+        <th>country</th>
+        <th>city</th>
+        <th>phone</th>
+        <th>
+        </th>
+    </thead>
+    <tbody>
+        <% for (var e in entities) { %>
+            <tr >
+                <td><%=entities[e].name || ''%></td>
+                <td><%=entities[e].url || ''%></td>
+                <td><%=entities[e].descShort || ''%></td>
+                <td><%=entities[e].country || ''%></td>
+                <td><%=entities[e].city || ''%></td>
+                <td><%=entities[e].phone || ''%></td>
+                <td>
+                    <button _id=<%=entities[e].id%> class="btn btn-mini showModal" type="button" data-toggle="modal" ><i class="icon-pencil"></i></button> 
+                    <button _id=<%=entities[e].id%> class="btn btn-mini delete" type="button"><i class="icon-remove"></i></button>
+                </td>
+            </tr>
+        <% } %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+<div class="el-modal"></div>

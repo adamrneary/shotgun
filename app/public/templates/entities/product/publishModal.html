@@ -1,0 +1,49 @@
+<div class="publish-modal modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Publish product</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+
+            <input type="hidden" name="id" value="<%=id%>">
+
+            <div class="control-group">
+                <label class="control-label">Channels</label>
+                <div class="controls">
+                    <% for (var c in channels) { %>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="channels" value="<%=channels[c].id%>"> <%=channels[c].name%>
+                        </label>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label"><%=nls.modal.channelContent.content%></label>
+                <div class="controls">
+                    <input type="text" name="content" value="">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Public</label>
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="public" value=true > Yes
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="public" value=false checked > No
+                    </label>
+                </div>
+            </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-primary publish-modal-accept">Publish</button>
+    </div>
+</div>
+
+
+

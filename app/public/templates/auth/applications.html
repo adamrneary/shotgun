@@ -1,0 +1,76 @@
+<div id="application" class="span12">
+    <form id="application-form" class="form-inline" method="post">
+        <legend>
+            <i class="icon-plus-sign"></i> 
+            <%=nls.applicationForm.header%> 
+        </legend>
+
+        <div class="control-group">
+            <label class="control-label" for="application"><%=nls.redirect%></label>
+            <div class="controls">
+                <input type="text" required name="redirect" class="input-large">
+                <div class="alert alert-error error-message hide margin4-v"></div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="application"><%=nls.name%></label>
+            <div class="controls">
+                <input type="text" required name="name" class="input-large">
+                <div class="alert alert-error error-message hide margin4-v"></div>
+            </div>
+        </div>
+
+
+        <div class="controls">
+            <button id="save-submit" class="btn btn-primary" data-loading-text="Loading..."> <i class="icon-signin"> </i> <%=nls.save%> </button>
+        </div>
+    </form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Redirect</th>
+            <th>Key</th>
+            <th>Secret</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (var c in applications) { %>
+            <tr class="application-tr">
+                <td>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="text" name="name"  value='<%=applications[c].name || ''%>' class="input-large application-name">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+                    
+                </td>
+                <td>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="text" name="redirect" value='<%=applications[c].redirect || ''%>' class="input-large application-redirect">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    
+                </td>
+
+                <td><%=applications[c].key || ''%></td>
+                <td><%=applications[c].secret || 'Application shall be considered'%></td>
+                <td><button _id=<%=applications[c].id%> class="btn btn-mini update" type="button" data-toggle="modal">Update</button></td>
+                <td><button _id=<%=applications[c].id%> class="btn btn-mini delete" type="button" data-toggle="modal"><i class="icon-remove"></i></button></td>
+
+            </tr>
+        <% } %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+
+</div>
+
+

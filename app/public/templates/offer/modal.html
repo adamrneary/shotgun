@@ -1,0 +1,78 @@
+<div  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="offerRules-form" class="form-horizontal save-form">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Rules</h3>
+        </div>
+
+        <div class="well span6">
+
+            <% if (rule.id) { %>
+                <input type="hidden" name="id" value="<%=rule.id%>">
+            <% } %>
+
+            <div class="control-group">
+                <label class="control-label">Name</label>
+                <div class="controls">
+                    <input required type="text" name="name" value="<%=rule.name || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Decription</label>
+                <div class="controls">
+                    <input type="text" name="description" value="<%=rule.description || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">content_failure</label>
+                <div class="controls">
+                    <input type="text" name="content_failure" value="<%=rule.content_failure || ''%>">
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                <label class="control-label">start_datetime</label>
+                <div class="controls">
+                    <input type="text" class="anytime" name="start_datetime" value="<%=rule.start_datetime || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">end_datetime</label>
+                <div class="controls">
+                    <input type="text" class="anytime" name="end_datetime" value="<%=rule.end_datetime || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">counter</label>
+                <div class="controls">
+                    <input type="text" name="counter" value="<%=rule.counter || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">counter_to_day</label>
+                <div class="controls">
+                    <input type="text" name="counter_to_day" value="<%=rule.counter_to_day || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">counter_to_hour</label>
+                <div class="controls">
+                    <input type="text" name="counter_to_hour" value="<%=rule.counter_to_hour || ''%>">
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-primary save">Save</button>
+        </div>
+    </form>
+
+</div>

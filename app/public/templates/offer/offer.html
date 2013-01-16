@@ -1,0 +1,101 @@
+<legend>Offer</legend>
+<div class="span6 well">
+
+
+    <div class="row">
+        <div class="span2">name: </div>
+        <div class="span4"><%=offer.name || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">code_ref: </div>
+        <div class="span4"><%=offer.code_ref || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">type: </div>
+        <div class="span4"><%=offer.type || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">category: </div>
+        <div class="span4"><%=offer.category || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">conditions: </div>
+        <div class="span4"><%=offer.conditions || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">description: </div>
+        <div class="span4"><%=offer.description || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">short_description: </div>
+        <div class="span4"><%=offer.short_description || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">logo_url: </div>
+        <div class="span4"><%=offer.logo_url || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">url: </div>
+        <div class="span4"><%=offer.url || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">media: </div>
+        <div class="span4"><%=offer.media || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">unicode_count: </div>
+        <div class="span4"><%=offer.unicode_count || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">start_datetime: </div>
+        <div class="span4"><%=utils.date(offer.start_datetime) || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">end_datetime: </div>
+        <div class="span4"><%=utils.date(offer.end_datetime) || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">valid_locations: </div>
+        <div class="span4"><%=offer.valid_locations || ''%></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">creation_datetime: </div>
+        <div class="span4"><%=utils.date(offer.creation_datetime) %></div>
+    </div>
+
+    <div class="row">
+        <div class="span2">lm: </div>
+        <div class="span4"><%=utils.date(offer.lm) || ''%></div>
+    </div>
+
+    <% if (role == 'issuer') { %>
+        <button class="btn btn-primary showModal"> Add rules </button>
+    <% } %>
+    <% if (role == 'user') { %>
+        <button class="btn btn-warning getUnicode"> get unicode </button>
+    <% } %>
+
+</div>
+
+
+
+<legend>Rules</legend>
+<div class="offer-rules-list">
+
+</div>
+
+<div class="el-modal"></div>

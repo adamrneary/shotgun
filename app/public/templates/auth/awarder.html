@@ -1,0 +1,105 @@
+<div class="container">
+    <div class="row">
+        <div class="span5">
+
+            <form id="awarder-form" class="form-horizontal">
+                <fieldset>
+                    <legend>
+                        <i class="icon-plus-sign"></i> 
+                        <%=nls.awarderForm.header%> 
+                    </legend>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.name%></label>
+                        <div class="controls">
+                            <input type="text" required class="input-large" name="name" value="<%=awarder.name || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.descFull%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="descFull" value="<%=awarder.descFull || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.descShort%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="descShort" value="<%=awarder.descShort || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.logo%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="logo" value="<%=awarder.logo || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.url%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="url" value="<%=awarder.url || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.address%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="address" value="<%=awarder.address || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.city%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="city" value="<%=awarder.city || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.country%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="country" value="<%=awarder.country || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.zip%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="zip" value="<%=awarder.zip || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="awarder-name"><%=nls.awarderForm.phone%></label>
+                        <div class="controls">
+                            <input type="text" class="input-large" name="phone" value="<%=awarder.phone || ''%>">
+                            <div class="alert alert-error error-message hide margin4-v"></div>
+                        </div>
+                    </div>
+
+                    <% if (!awarder.active) { %>
+                        <div class="control-group">
+                            <div class="controls">
+                                <button id="awarder-submit" type="submit" class="btn btn-primary"> <i class="icon-signin"> </i> <%=nls.save%> </button>
+                            </div>
+                        </div>
+                    <% } %>
+
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div style='text-align: center;'>
+    <h3>Userlist of <%=channel.name%></h3>
+<div style='text-align: center;'>
+    <button class="btn btn-small inline pag pag-left" pag=prev type="button"><i class="icon-arrow-left"></i></button>
+    <span class="pageCur"><%=page%></span> of
+    <span class="pageCount"><%=pageCount%></span>
+    <button class="btn btn-small inline pag pag-right" pag=next type="button"><i class="icon-arrow-right"></i></button>
+</div>
+<br>
+</div>
+
+<div style='text-align: center;'>
+
+</div>
+<br>
+<table class="table channelList">
+    <thead>
+        <th>login</th>
+        <th>name</th>
+        <th>twitter name</th>
+        <th>email</th>
+    </thead>
+    <tbody>
+        <% for (var e in channelUsers) { %>
+            <tr style="cursor: pointer" class="open-row" _url="#channel/<%=channelUsers[e].id%>/1" _id=<%=channelUsers[e].id || ''%>>
+                <td><%=channelUsers[e].login || ''%></td>
+                <td><%=channelUsers[e].name || ''%></td>
+                <td><%=channelUsers[e].twitterName || ''%></td>
+                <td><%=channelUsers[e].email || ''%></td>
+                <% if ((session.roles.indexOf('issuer') != -1 && channel.issuerId == session.id) || role == 'admin') { %>
+                    <td>
+                        <!--<button _id=<%=channelUsers[e].id%> class="btn btn-mini delete" type="button"><i class="icon-remove"></i></button>-->
+                    </td>
+                <% } else if (role == 'issuer') {%>
+                    <td></td>
+                <% } %>
+            </tr>
+        <% } %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+<div class="el-modal"></div>
+
+

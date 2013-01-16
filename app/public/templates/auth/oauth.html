@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="row">
+        <div class="span4">
+            <legend>
+                <i class="icon-ok-sign"></i> 
+                <%=nls.loginWith%>
+            </legend>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span2 pull-right">
+            <button id="login-show-qr" class="btn btn-primary"> <i class="icon-signin"> </i> <%=nls.auth.oauth.qr%> </button>
+        </div>
+        <% if (!user.twitterName) { %>
+            <div class="span2">
+                <button id="login-twitter" class="btn btn-primary"> <i class="icon-twitter-sign"> </i> Twitter </button>
+            </div>
+        <% } %>
+        <!--<button id="login-facebook" class="btn btn-primary"> <i class="icon-facebook-sign"> </i> Facebook </button>-->
+    </div>
+
+    <div class="row">
+        <% if (user.twitterName) { %>
+            <div class="span4">
+                <b><%=nls.twitter%>:</b>
+                <label><%=user.twitterName%></label>
+            </div>
+        <% } %>
+        <div class="span4 pull-right">
+            <br/> <br/> <br/> <br/> <br/>
+            <div id="qr-container" class="pull-right" style="display: none;">
+                <div id="qrcode">
+                </div>
+                <div>
+                    <br> <br> <br>
+                    <button id="login-update-qr-status" class="btn btn-primary" data-loading-text="Loading..."> <i class="icon-signin"> </i><%=nls.auth.oauth.qrCheck%></button>
+                </div>
+            </div>
+            <br/> <br/> <br/> <br/>
+        </div>
+    </div>
+</div>

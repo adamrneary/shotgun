@@ -1,0 +1,133 @@
+<div class="modal modal-update hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="admin-userList-form" class="form-horizontal save-form">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">User</h3>
+        </div>
+        <div class="modal-body">
+
+            <% if (entity.id) { %>
+                <input type="hidden" name="id" value="<%=entity.id%>">
+            <% } %>
+
+            <div class="control-group">
+                <label class="control-label">Login</label>
+                <div class="controls">
+                    <input type="text" name="login" value="<%=entity.login || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Password</label>
+                <div class="controls">
+                    <input type="text" name="password" value="<%=entity.password || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Name</label>
+                <div class="controls">
+                    <input type="text" required name="name" value="<%=entity.name || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Twitter name</label>
+                <div class="controls">
+                    <input type="text" name="twitterName" value="<%=entity.twitterName || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Email</label>
+                <div class="controls">
+                    <input type="text" name="email" value="<%=entity.email || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Roles</label>
+                <div class="controls">
+                    <label class="checkbox inline">
+                        <input type="checkbox" name="roles" value="guest" <% if( entity.roles.indexOf("guest") != -1  || !entity.roles[0] ) { %> checked <% } %> > Guest
+                    </label>
+                    <label class="checkbox inline">
+                        <input type="checkbox" name="roles" value="user" <% if( entity.roles.indexOf("user") != -1  || !entity.roles[0] ) { %> checked <% } %> > User
+                    </label>
+                    <label class="checkbox inline">
+                        <input type="checkbox"  name="roles" value="awarder" <% if( entity.roles.indexOf("awarder") != -1 ) { %> checked <% } %> > Awarder
+                    </label>
+                    <label class="checkbox inline">
+                        <input type="checkbox" name="roles" value="issuer" <% if( entity.roles.indexOf("issuer") != -1 ) { %> checked <% } %> > Issuer
+                    </label>
+                    <label class="checkbox inline">
+                        <input type="checkbox" name="roles" value="admin" <% if( entity.roles.indexOf("admin") != -1 ) { %> checked <% } %> > Admin
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Gender</label>
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="gen" value="m" <% if( entity.gen == "m" ) { %> checked <% } %> > Male
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="gen" value="f" <% if( entity.gen == "f" ) { %> checked <% } %> > Female
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Birth</label>
+                <div class="controls">
+                    <input type="text" name="birth" value="<%=entity.birth || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Phone</label>
+                <div class="controls">
+                    <input type="text" name="phone" value="<%=entity.phone || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Address</label>
+                <div class="controls">
+                    <input type="text" name="address" value="<%=entity.address || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Zip</label>
+                <div class="controls">
+                    <input type="text" name="zip" value="<%=entity.zip || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">City</label>
+                <div class="controls">
+                    <input type="text" name="city" value="<%=entity.city || ''%>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Country</label>
+                <div class="controls">
+                    <input type="text" name="country" value="<%=entity.country || ''%>">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button class="btn btn-primary save">Save</button>
+        </div>
+    </form>
+</div>
+
+
+

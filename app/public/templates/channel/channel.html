@@ -1,0 +1,74 @@
+<div style='text-align: center;'>
+    <% if (user.roles.indexOf('user') != -1) { %>
+        <% if (subscribed) { %>
+            <button class="btn btn-small inline pull-left channel-unsubscribe" type="button">Unsubscribe</button>
+        <% } else { %>
+            <button class="btn btn-small btn-success inline pull-left channel-subscribe" type="button">Subscribe</button>
+        <% } %>
+    <% } %>
+
+    <% if (user.roles.indexOf('awarder') != -1) { %>
+        <% if (subscribedAsAwarder) { %>
+            <button class="btn btn-small inline pull-left channel-unsubscribe-awarder" type="button">Unsubscribe as awarder</button>
+        <% } else { %>
+            <button class="btn btn-small btn-success inline pull-left channel-subscribe-awarder" type="button">Subscribe as awarder</button>
+        <% } %>
+    <% } %>
+
+    <h3><%=channel.name%></h3>
+    <br />
+    <h5 class='pull-right'><%=channel.issuerName || ''%></h5>
+</div>
+<div style='text-align: center;'>
+    <button class="btn btn-small inline pag pag-left" pag=prev type="button"><i class="icon-arrow-left"></i></button>
+    <span class="pageCur"><%=page%></span> of
+    <span class="pageCount"><%=pageCount%></span>
+    <button class="btn btn-small inline pag pag-right" pag=next type="button"><i class="icon-arrow-right"></i></button>
+    <% if ((user.roles.indexOf('issuer') != -1 && channel.issuerId == user.id) || user.roles.indexOf('admin') != -1) { %>
+        <button class="btn btn-small btn-danger pull-right deleteAll" type="button"><i class="icon-remove"></i> Delete all</button>
+    <% } %>
+</div>
+<br>
+<table class="table">
+    <thead>
+        <!--<th>id</th>-->
+        <th>content</th>
+        <th>type</th>
+        <th>date</th>
+        <!--<th>url</th>-->
+        <% if (user.roles.indexOf('issuer') != -1 && channel.issuerId == user.id) { %>
+            <th>
+                <button class="btn btn-mini btn-warning create-content" type="button"><i class="icon-plus-sign"></i> Create</button>
+            </th>
+        <% } else if (user.roles.indexOf('admin') != -1) { %>
+            <th></th>
+        <% } %>
+    </thead>
+    <tbody>
+        <% for (var c in channelContents) { %>
+            <% if (channelContents[c].contentType == 'offer' || channelContents[c].contentType == 'product') { %>
+                <tr style="cursor: pointer" class="channelContentRow content-open" _id=<%=channelContents[c].id || ''%> contentId=<%=channelContents[c].contentId%> contentType=<%=channelContents[c].contentType%>>
+            <% } else { %>
+                <tr style="" class="channelContentRow" _id=<%=channelContents[c].id || ''%> contentId=<%=channelContents[c].contentId%>>
+            <% } %>
+                <td><%=channelContents[c].content || ''%></td>
+                <td class="channelContent-type"><%=channelContents[c].contentType || ''%></td>
+                <td><%=utils.date(channelContents[c].publishingDate)%></td>
+                <!--<td>-->
+                    <!--<a class="openchannelContent" _id="<%=channelContents[c].id%>" href="#channelContent/<%=channelContents[c].id%>">open</a>-->
+                <!--</td>-->
+                <% if ((user.roles.indexOf('issuer') != -1 && channel.issuerId == user.id) || user.roles.indexOf('admin') != -1) { %>
+                    <td>
+                        <button _id=<%=channelContents[c].id%> class="btn btn-mini update-content" type="button" data-toggle="modal" ><i class="icon-pencil"></i></button> 
+                        <button _id=<%=channelContents[c].id%> class="btn btn-mini delete" type="button"><i class="icon-remove"></i></button>
+                    </td>
+                <% } %>
+            </tr>
+        <% } %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+<div class="el-modal"></div>
+
+

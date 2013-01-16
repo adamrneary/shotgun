@@ -1,0 +1,54 @@
+<div style='text-align: center;'>
+    <h3><%=entity%>s</h3>
+    <br />
+</div>
+<div style='text-align: center;'>
+    <button class="btn btn-small inline pag pag-left" pag=prev type="button"><i class="icon-arrow-left"></i></button>
+    <span class="pageCur"><%=page%></span> of
+    <span class="pageCount"><%=pageCount%></span>
+    <button class="btn btn-small inline pag pag-right" pag=next type="button"><i class="icon-arrow-right"></i></button>
+    <% if (role == 'issuer' || role == 'admin') { %>
+        <button class="btn btn-small btn-danger pull-right deleteAll" type="button"><i class="icon-remove"></i> Delete all</button>
+    <% } %>
+
+</div>
+<br>
+<table class="table channelList">
+    <thead>
+        <th>name</th>
+        <th>desc</th>
+        <th>issuer name</th>
+        <th>last modification</th>
+        <% if (role == 'issuer') { %>
+            <th>
+                <button class="btn btn-mini btn-warning showModal" type="button"><i class="icon-plus-sign"></i> Create</button>
+            </th>
+        <% } else if (role == 'admin') {%>
+            <th> </th>
+        <% } %>
+
+    </thead>
+    <tbody>
+        <% for (var e in entities) { %>
+            <tr style="cursor: pointer" class="open-row" _url="#channel/<%=entities[e].id%>/1" _id=<%=entities[e].id || ''%>>
+                <td><%=entities[e].name || ''%></td>
+                <td><%=entities[e].desc || ''%></td>
+                <td><%=entities[e].issuerName || ''%></td>
+                <td><%=utils.date(entities[e].lm)%></td>
+                <% if ((role == 'issuer' && entities[e].issuerId == user.id) || role == 'admin') { %>
+                    <td>
+                        <button _id=<%=entities[e].id%> class="btn btn-mini showUsers" type="button"><i class="icon-user"></i></button> 
+                        <button _id=<%=entities[e].id%> class="btn btn-mini showModal" type="button"><i class="icon-pencil"></i></button> 
+                        <button _id=<%=entities[e].id%> class="btn btn-mini delete" type="button"><i class="icon-remove"></i></button>
+                    </td>
+                <% } else if (role == 'issuer') {%>
+                    <td></td>
+                <% } %>
+            </tr>
+        <% } %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+<div class="el-modal"></div>
+
