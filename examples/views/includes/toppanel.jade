@@ -1,0 +1,28 @@
+.navbar.navbar-inverse.navbar-fixed-top
+  .navbar-inner
+    .container
+      a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.brand(href='http://www.activecell.com') Tablestakes
+      .nav-collapse
+        ul.nav
+          li(class="#{page == 'index'? 'active': ''}")
+            a(href='/')
+              i.icon-white.icon-home
+              | Home
+          li(class="#{page == 'mocha'? 'active': ''}")
+            a(href='/mocha')
+              i.icon-white.icon-ok
+              | Tests
+          li(class="#{page == 'styleguide'? 'active': ''}")
+            a(href='/styleguide')
+              i.icon-white.icon-glass
+              | Style Guide
+          li
+            a(href='https://github.com/activecell/#{name}')
+              i.icon-white.icon-book
+              | Source
+      //
+        /.nav-collapse 

@@ -1,0 +1,19 @@
+!!! 5
+html
+  head
+    link(rel='stylesheet', href='libs/css/mocha.css')
+    include includes/head
+    script(src='libs/assert.js')
+    script(src='libs/mocha.js')
+    script
+      mocha.setup('bdd')
+    script(src='js/test.js')
+    style
+      #mocha-stats { top: 60px; }
+      #mocha-stats .progress { overflow: visible; }
+  body
+    include includes/toppanel
+    .container
+      #mocha
+      script
+        mocha.run();

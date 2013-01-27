@@ -6,3 +6,4 @@ node_modules/
 .sass-cache/
 .idea/
 *kate-swp
+npm-debug.log

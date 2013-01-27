@@ -1,0 +1,19 @@
+!!! 5
+html
+  head
+    include includes/head
+    link(href='css/examples.css', rel='stylesheet', type='text/css')
+    script(type='text/javascript', src='js/loader.js')
+
+  body
+    include includes/toppanel
+    .container
+      .row
+        .span3
+          .well
+            ul#coreLinkList.nav.nav-list
+              li.nav-header
+                | Core features
+        .span9
+            #loader
+    hr
