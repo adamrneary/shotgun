@@ -5,7 +5,8 @@ loader = new Shotgun.Loader({
   el: '#loader',
   url: {
     js: 'js/testapp.js?' + Math.random(),
-    css: 'css/testapp.css?' + Math.random()
+    css: 'css/testapp.css?' + Math.random(),
+    data: '/mocha'
   },
   functions: [
     function(cb) {

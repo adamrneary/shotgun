@@ -11,16 +11,20 @@ module.exports.options =
 
 module.exports.compile = (cb)->
     compileCoffeeSrc ->
+      joinAssets "#{__dirname}/../dist/#{module.exports.name}.js", ['d3','jquery/jquery-min'], ->
         compileCoffeeTests ->
             compileCoffeeExamples ->
                 compileExamplesScss ->
-                    switch module.exports.css
-                        when 'less'
-                            compileLess ->
-                                cb()
-                        when 'scss'
-                            compileScss ->
-                                cb()
+                    compileScss ->
+                        cb()
+
+joinAssets = (dest,assets,cb)->
+    result = ''
+    for asset in assets
+      result += fs.readFileSync "#{__dirname}/../examples/public/libs/#{asset}.js"
+    result += fs.readFileSync dest
+    fs.writeFile dest, result, (err)->
+      cb() if cb
 
 compileCoffeeTests = (cb)->
     child_process.exec "#{__dirname}/../node_modules/coffee-script/bin/coffee -j #{__dirname}/../examples/public/js/test.js -cb #{__dirname}/../test/client/", (err,stdout,stderr)->

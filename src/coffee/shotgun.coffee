@@ -9,8 +9,11 @@ Shotgun.Loader = class Loader
     styleMax: 0.2
     styleLength: 50
 
-    dataMax: 0.6
+    dataMax: 0.5
     dataLength: 1000000
+
+    funMax: 0.1
+    funLength: 1000
 
     debug: true
     width: 960
@@ -38,10 +41,12 @@ Shotgun.Loader = class Loader
         @loadScript =>
             @loadStyle =>
                 @loadData =>
+                    #@applyFunctions =>
                     @log "start", "all ready, starting app"
                     clearInterval @interval
                     @meter.transition().delay(250).attr "transform", "scale(0)"
-                    @options.ready()
+                    d3.select(@options.el).remove()
+                    @options.ready @script,@data
 
     render: ->
         @arc = d3.svg.arc().startAngle(0).innerRadius(180).outerRadius(240)
@@ -60,7 +65,7 @@ Shotgun.Loader = class Loader
         xhr.on "progress", =>
             @transition @progress+((d3.event.loaded/@scriptLength)*@scriptMax)
         xhr.get (error, data)=>
-            eval(data.response.toString())
+            @script = data.response.toString()
             @transition @scriptMax
             cb()
 
@@ -70,26 +75,21 @@ Shotgun.Loader = class Loader
         xhr.on "progress", =>
             @transition @progress+((d3.event.loaded/@styleLength)*@styleMax)
         xhr.get (error, data)=>
-            console.log 'styles:',data.response
             $('head').append "<style>#{data.response}</style>"
             @transition @scriptMax+@styleMax
             cb()
 
-    callRecursive: (i,cb)->
-        if @options.functions[i]
-            @options.functions[i] =>
-                cur = @scriptMax+@styleMax+(i+1)*@dataMax/@options.functions.length
-                if cur > @progress
-                    @transition cur
-                i++
-                if @options.functions[i]
-                    @callRecursive i,cb
-                else
-                    cb()
-        else
+    loadData: (cb)->
+        @log "loadData", "loading data"
+        xhr = d3.xhr("#{@options.url.data}")
+        xhr.on "progress", =>
+            @transition @progress+((d3.event.loaded/@dataLength)*@dataMax)
+        xhr.get (error, data)=>
+            @data = data.response.toString()
+            @transition @dataMax
             cb()
 
-    loadData: (cb)->
+    applyFunctions: (cb)->
         @log "loadData", "loading data"
         @interval = setInterval =>
             if @progress < 0.99

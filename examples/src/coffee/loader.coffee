@@ -3,6 +3,7 @@ loader = new Shotgun.Loader
     url:
         js: 'js/testapp.js?'+Math.random()
         css: 'css/testapp.css?'+Math.random()
+        data: '/mocha'
     functions: [
         (cb)->
             window.app = new window.Testapp
