@@ -81,12 +81,20 @@ Shotgun.Loader = Loader = (function() {
   };
 
   Loader.prototype.render = function() {
+    var _this = this;
     this.arc = d3.svg.arc().startAngle(0).innerRadius(180).outerRadius(240);
     this.svg = d3.select(this.options.el).append("svg").attr("width", this.width).attr("height", this.height).append("g").attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")");
     this.meter = this.svg.append("g").attr("class", "progress-meter");
     this.meter.append("path").attr("class", "background").attr("d", this.arc.endAngle(this.twoPi));
     this.foreground = this.meter.append("path").attr("class", "foreground");
-    return this.text = this.meter.append("text").attr("text-anchor", "middle").attr("dy", ".35em");
+    this.text = this.meter.append("text").attr("text-anchor", "middle").attr("dy", ".35em");
+    return this.interval = setInterval(function() {
+      if (_this.progress < 0.99) {
+        _this.progress += 0.001;
+        _this.foreground.attr("d", _this.arc.endAngle(_this.twoPi * _this.progress));
+        return _this.text.text(_this.formatPercent(_this.progress));
+      }
+    });
   };
 
   Loader.prototype.updateProgress = function(progress) {};
@@ -131,7 +139,9 @@ Shotgun.Loader = Loader = (function() {
       return _this.transition(_this.progress + ((d3.event.loaded / _this.dataLength) * _this.dataMax));
     });
     return xhr.get(function(error, data) {
-      _this.data = data.response.toString();
+      if (data) {
+        _this.data = data.response.toString();
+      }
       _this.transition(_this.dataMax);
       return cb();
     });

@@ -56,6 +56,14 @@ Shotgun.Loader = class Loader
         @foreground = @meter.append("path").attr("class", "foreground")
         @text = @meter.append("text").attr("text-anchor", "middle").attr("dy", ".35em")
 
+        @interval = setInterval =>
+            if @progress < 0.99
+                #t = 0.001
+                #i = d3.interpolate(@progress, @progress+t)
+                @progress += 0.001
+                @foreground.attr "d", @arc.endAngle(@twoPi * @progress)
+                @text.text @formatPercent(@progress)
+
     updateProgress: (progress)->
 
     loadScript: (cb)->
@@ -85,7 +93,8 @@ Shotgun.Loader = class Loader
         xhr.on "progress", =>
             @transition @progress+((d3.event.loaded/@dataLength)*@dataMax)
         xhr.get (error, data)=>
-            @data = data.response.toString()
+            if data
+              @data = data.response.toString()
             @transition @dataMax
             cb()
 
