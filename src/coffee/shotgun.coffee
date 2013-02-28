@@ -9,13 +9,12 @@ Shotgun.Loader = class Loader
     styleMax: 0.2
     styleLength: 50
 
-    dataMax: 0.5
-    dataLength: 1000000
+    #dataMax: 0.5
+    #dataLength: 1000000
 
-    funMax: 0.1
-    funLength: 1000
+    funMax: 0.6
 
-    debug: true
+    debug: false
     width: 960
     height: 500
     twoPi: 2 * Math.PI
@@ -24,7 +23,7 @@ Shotgun.Loader = class Loader
     constructor: (options)->
         @options = options or {}
         @options.el = 'body' unless @options.el
-        @debug = @options.debug if @options.debug?
+        @debug = @options.debug
 
     log: (from,msg)->
         if from and msg
@@ -40,8 +39,8 @@ Shotgun.Loader = class Loader
         @render()
         @loadScript =>
             @loadStyle =>
-                @loadData =>
-                    #@applyFunctions =>
+                #@loadData =>
+                @applyFunctions =>
                     @log "start", "all ready, starting app"
                     clearInterval @interval
                     @meter.transition().delay(250).attr "transform", "scale(0)"
@@ -63,6 +62,7 @@ Shotgun.Loader = class Loader
                 @progress += 0.001
                 @foreground.attr "d", @arc.endAngle(@twoPi * @progress)
                 @text.text @formatPercent(@progress)
+        , 10
 
     updateProgress: (progress)->
 
@@ -98,21 +98,35 @@ Shotgun.Loader = class Loader
             @transition @dataMax
             cb()
 
+    callRecursive: (i,cb)->
+        if @options.functions[i]
+            @options.functions[i] =>
+                cur = @scriptMax+@styleMax+(i+1)*@dataMax/@options.functions.length
+                if cur > @progress
+                    @transition cur
+                i++
+                if @options.functions[i]
+                    @callRecursive i,cb
+                else
+                    cb()
+        else
+            cb()
+
     applyFunctions: (cb)->
         @log "loadData", "loading data"
-        @interval = setInterval =>
-            if @progress < 0.99
-                #t = 0.001
-                #i = d3.interpolate(@progress, @progress+t)
-                @progress += 0.001
-                @foreground.attr "d", @arc.endAngle(@twoPi * @progress)
-                @text.text @formatPercent(@progress)
-            #@transition @progress+0.001,1
-        , 20
+        #@interval = setInterval =>
+            #if @progress < 0.99
+                ##t = 0.001
+                ##i = d3.interpolate(@progress, @progress+t)
+                #@progress += 0.001
+                #@foreground.attr "d", @arc.endAngle(@twoPi * @progress)
+                #@text.text @formatPercent(@progress)
+            ##@transition @progress+0.001,1
+        #, 20
         @callRecursive 0,cb
 
     transition: (cur)->
-        console.log 'transition',cur
+        console.log 'transition',cur if @debug
         d3.transition().tween "progress", =>
             (t) =>
                 if @progress < 0.99

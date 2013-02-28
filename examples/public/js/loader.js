@@ -2,25 +2,22 @@
 var loader;
 
 loader = new Shotgun.Loader({
+  debug: true,
   el: '#loader',
   url: {
     js: 'js/testapp.js?' + Math.random(),
-    css: 'css/testapp.css?' + Math.random(),
-    data: '/mocha'
+    css: 'css/testapp.css?' + Math.random()
   },
   functions: [
     function(cb) {
-      return window.app = new window.Testapp({
-        callback: cb
-      });
-    }, function(cb) {
-      return window.app.fun1(cb);
-    }, function(cb) {
-      return window.app.fun2(cb);
+      return setTimeout(function() {
+        console.log('fn ready');
+        return cb();
+      }, 1000);
     }
   ],
   ready: function() {
-    return window.app.ready();
+    return console.log('ready');
   }
 });
 

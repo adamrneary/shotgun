@@ -21,15 +21,9 @@ Shotgun.Loader = Loader = (function() {
 
   Loader.prototype.styleLength = 50;
 
-  Loader.prototype.dataMax = 0.5;
+  Loader.prototype.funMax = 0.6;
 
-  Loader.prototype.dataLength = 1000000;
-
-  Loader.prototype.funMax = 0.1;
-
-  Loader.prototype.funLength = 1000;
-
-  Loader.prototype.debug = true;
+  Loader.prototype.debug = false;
 
   Loader.prototype.width = 960;
 
@@ -44,9 +38,7 @@ Shotgun.Loader = Loader = (function() {
     if (!this.options.el) {
       this.options.el = 'body';
     }
-    if (this.options.debug != null) {
-      this.debug = this.options.debug;
-    }
+    this.debug = this.options.debug;
   }
 
   Loader.prototype.log = function(from, msg) {
@@ -69,7 +61,7 @@ Shotgun.Loader = Loader = (function() {
     this.render();
     return this.loadScript(function() {
       return _this.loadStyle(function() {
-        return _this.loadData(function() {
+        return _this.applyFunctions(function() {
           _this.log("start", "all ready, starting app");
           clearInterval(_this.interval);
           _this.meter.transition().delay(250).attr("transform", "scale(0)");
@@ -94,7 +86,7 @@ Shotgun.Loader = Loader = (function() {
         _this.foreground.attr("d", _this.arc.endAngle(_this.twoPi * _this.progress));
         return _this.text.text(_this.formatPercent(_this.progress));
       }
-    });
+    }, 10);
   };
 
   Loader.prototype.updateProgress = function(progress) {};
@@ -147,22 +139,37 @@ Shotgun.Loader = Loader = (function() {
     });
   };
 
-  Loader.prototype.applyFunctions = function(cb) {
+  Loader.prototype.callRecursive = function(i, cb) {
     var _this = this;
+    if (this.options.functions[i]) {
+      return this.options.functions[i](function() {
+        var cur;
+        cur = _this.scriptMax + _this.styleMax + (i + 1) * _this.dataMax / _this.options.functions.length;
+        if (cur > _this.progress) {
+          _this.transition(cur);
+        }
+        i++;
+        if (_this.options.functions[i]) {
+          return _this.callRecursive(i, cb);
+        } else {
+          return cb();
+        }
+      });
+    } else {
+      return cb();
+    }
+  };
+
+  Loader.prototype.applyFunctions = function(cb) {
     this.log("loadData", "loading data");
-    this.interval = setInterval(function() {
-      if (_this.progress < 0.99) {
-        _this.progress += 0.001;
-        _this.foreground.attr("d", _this.arc.endAngle(_this.twoPi * _this.progress));
-        return _this.text.text(_this.formatPercent(_this.progress));
-      }
-    }, 20);
     return this.callRecursive(0, cb);
   };
 
   Loader.prototype.transition = function(cur) {
     var _this = this;
-    console.log('transition', cur);
+    if (this.debug) {
+      console.log('transition', cur);
+    }
     return d3.transition().tween("progress", function() {
       return function(t) {
         var i;
