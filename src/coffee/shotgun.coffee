@@ -43,14 +43,18 @@ Shotgun.Loader = class Loader
                 @applyFunctions =>
                     @log "start", "all ready, starting app"
                     clearInterval @interval
-                    @meter.transition().delay(250).attr "transform", "scale(0)"
-                    d3.select(@options.el).remove()
                     @options.ready @script,@data
+                    setTimeout =>
+                      @meter.transition().delay(250).attr "transform", "scale(0)"
+                      @el.remove()
+                    , 10
 
     render: ->
+        @el = d3.select('body').append('div').attr('id','shotgun')
         @arc = d3.svg.arc().startAngle(0).innerRadius(180).outerRadius(240)
-        @svg = d3.select(@options.el).append("svg").attr("width", @width).attr("height", @height).append("g").attr("transform", "translate(" + @width / 2 + "," + @height / 2 + ")")
-        @meter = @svg.append("g").attr("class", "progress-meter")
+        @svg = @el.append("svg").attr("width", @width).attr("height", @height)
+        g = @svg.append("g").attr("transform", "translate(" + @width / 2 + "," + @height / 2 + ")")
+        @meter = g.append("g").attr("class", "progress-meter")
         @meter.append("path").attr("class", "background").attr "d", @arc.endAngle(@twoPi)
         @foreground = @meter.append("path").attr("class", "foreground")
         @text = @meter.append("text").attr("text-anchor", "middle").attr("dy", ".35em")
@@ -83,7 +87,7 @@ Shotgun.Loader = class Loader
         xhr.on "progress", =>
             @transition @progress+((d3.event.loaded/@styleLength)*@styleMax)
         xhr.get (error, data)=>
-            $('head').append "<style>#{data.response}</style>"
+            d3.select('head').append('style').html data.response
             @transition @scriptMax+@styleMax
             cb()
 
@@ -127,6 +131,7 @@ Shotgun.Loader = class Loader
 
     transition: (cur)->
         console.log 'transition',cur if @debug
+        cur = 99 if cur > 99
         d3.transition().tween "progress", =>
             (t) =>
                 if @progress < 0.99
