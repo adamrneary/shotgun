@@ -1,4 +1,4 @@
-window.Shotgun = Shotgun = {} unless Shotgun
+window.Shotgun = Shotgun = {}
 
 Shotgun.Loader = class Loader
 

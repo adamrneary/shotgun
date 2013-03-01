@@ -4,12 +4,12 @@ html
     include includes/head
     link(href='libs/css/styleguide.css', rel='stylesheet', type='text/css')
 
-  body(data-spy='scroll', data-target='.nav-list')
+  body
     include includes/toppanel
-    .container
-      .row
+    .container-fluid
+      .row-fluid
         .span3
-          .well(data-spy='affix', data-offset-top='50', style='width: 220px;')
+          .well(style="position:fixed;")
             ul.nav.nav-list
               each section in sections
                 li
@@ -34,7 +34,8 @@ html
                 .styleguide-element.styleguide-modifier
                   span.styleguide-modifier-name #{modifier.name()}
                   section!= modifier.data.example
-              pre.styleguide-code= section.data.example
+              pre.styleguide-code
+                code(data-language='html')= section.data.example
     script(type='text/javascript')
       $(function() {
         $("[data-original-title]").tooltip();

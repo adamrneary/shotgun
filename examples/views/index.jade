@@ -3,7 +3,7 @@ html
   head
     include includes/head
     link(href='css/examples.css', rel='stylesheet', type='text/css')
-    script(type='text/javascript', src='js/loader.js')
+    script(type='text/javascript', src='js/examples.js')
 
   body
     include includes/toppanel
@@ -15,5 +15,11 @@ html
               li.nav-header
                 | Core features
         .span9
-            #loader
+          h3#example_header
+          #temp
+          #example(style='width:600px')
+          h3 Code for example
+          pre
+            code#example_js(data-language='javascript')
     hr
+

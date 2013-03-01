@@ -1,91 +1,65 @@
-name = 'shotgun'
+global.glob = {}
+glob.config = require './config'
 
-port = process.env.PORT or 5000
+glob.modules =
+  http: require 'http'
+  fs: require 'fs'
+  express: express = require 'express'
+  path: require 'path'
+  kss: require 'kss'
+  jade: require 'jade'
+  coffeelint: require 'coffeelint'
+  chai: require 'chai'
+  #async: require 'async'
 
-modules = 
-    http: require 'http'
-    fs: require 'fs'
-    express: express = require 'express'
-    path: require 'path'
-    kss: require 'kss'
-    jade: require 'jade'
-    #async: require 'async'
-
-app = express()
+glob.app = app = express()
 
 app.configure ->
-    app.set('port', port);
-    app.set('views', __dirname + '/../examples/views');
-    app.set('view engine', 'jade');
-    app.use express.favicon()
-    app.use express.cookieParser()
-    app.use express.bodyParser()
-    app.use express.methodOverride()
-    app.use app.router
-    app.use express.static "#{__dirname}/../examples/public/"
-    app.use express.errorHandler
-        dumpExceptions: true
-        showStack: true
+  app.set('port', glob.config.port)
+  app.set('views', __dirname + '/../examples/views')
+  app.set('view engine', 'jade')
+  app.use express.favicon()
+  app.use express.cookieParser()
+  app.use express.bodyParser()
+  app.use express.methodOverride()
+  app.use app.router
+  app.use express.static "#{__dirname}/../examples/public/"
+  app.use express.errorHandler
+    dumpExceptions: true
+    showStack: true
 
-compiler = require('./compiler')
-compiler.name = name
-compiler.css = 'scss'
-compiler.options.examples.coffee.join = false
+glob.getSections = (sections, cb) ->
+  jadeDir = "#{__dirname}/../examples/views/sections/"
+  for section in sections
+    section.data.filename = 'tables.scss'
+    section.data.description = section.data.description.replace(/\n/g, "<br />")
+    jade = null
+    try
+      jadePath = "#{jadeDir}#{section.reference()}.jade"
+      jade = glob.modules.fs.readFileSync jadePath
+    if jade
+      locals =
+        section: section
+        className: '$modifier'
+      html = glob.modules.jade.compile(jade, {pretty: true})(locals)
+      section.data.example = html
+      for modifier in section.modifiers()
+        a = {className: modifier.className()}
+        modifier.data.example = glob.modules.jade.compile(
+          jade,
+          {pretty: true}
+        )(a)
+  cb sections
+
+require './router'
 compile = require('./compiler').compile
 
-getSections = (sections,cb)->
-    for section in sections
-        section.data.filename = "#{name}.scss"
-        section.data.description = section.data.description.replace(/\n/g, "<br />")
-        jade = null
-        try
-            jade = modules.fs.readFileSync "#{__dirname}/../examples/views/sections/#{section.reference()}.jade"
-        if jade
-            locals =
-                section: section
-                className: '$modifier'
-            html = modules.jade.compile(jade, {pretty: true})(locals)
-            section.data.example = html
-            for modifier in section.modifiers()
-                modifier.data.example = modules.jade.compile(jade, {pretty: true})({className: modifier.className()})
-    cb sections
+arr = ['testing', 'development']
+if process.env.NODE_ENV in arr
+  glob.modules.http.createServer(app).listen glob.config.port, ->
+    console.log  'server start on port '+glob.config.port
+else
+  compile ->
+    glob.modules.http.createServer(app).listen glob.config.port, ->
+      console.log  'server start on port '+glob.config.port
 
-app.get '/', (req,res)->
-    compile ->
-        res.render 'index'
-            page: 'index'
-            name: name
-
-app.get '/mocha', (req,res)->
-    compile ->
-        res.render 'mocha'
-            page: 'mocha'
-            name: name
-
-app.get '/styleguide', (req,res)->
-    compile ->
-        options = 
-            markdown: false
-        #modules.kss.traverse "#{__dirname}/../dist/#{name}.css", options, (err, styleguide)->
-        #modules.kss.traverse "#{__dirname}/../dist/", options, (err, styleguide)->
-        modules.kss.traverse "#{__dirname}/../src/", options, (err, styleguide)->
-            getSections styleguide.section(), (sections)->
-                res.render 'styleguide'
-                    sections: sections
-                    page: 'styleguide'
-                    name: name
-
-app.get "/js/#{name}.js", (req,res)->
-    script = modules.fs.readFileSync "#{__dirname}/../dist/#{name}.js"
-    res.setHeader 'Content-Type', 'text/javascript'
-    res.setHeader 'Content-Length', script.length
-    res.end script
-
-app.get "/css/#{name}.css", (req,res)->
-    style = modules.fs.readFileSync "#{__dirname}/../dist/#{name}.css"
-    res.setHeader 'Content-Type', 'text/css'
-    res.setHeader 'Content-Length', style.length
-    res.end style
-
-modules.http.createServer(app).listen port, ->
-    console.log  'server start on port '+port

@@ -1,22 +1,29 @@
 {
-    "name": "TablesStakes",
-    "version": "0.0.9",
+    "name": "Shotgun",
+    "version": "0.0.2",
     "private": true,
     "scripts": {
-        "test": "./node_modules/mocha/bin/mocha test/server/run.js -G -R spec -s 20 --timeout 6000;",
-        "start": "node run"
+        "test": "node test/test.js",
+        "start": "node test/watcher.js"
     },
     "engines": {
-        "node": "0.8.x",
-        "npm":  "1.1.x"
+        "node": "0.8.14",
+        "npm": "1.1.x"
     },
     "dependencies": {
         "express": "3.0.6",
         "jade": "",
-        "coffee-script": "",
+        "coffee-script": "1.4.0",
         "node-sass": "",
         "kss": "",
         "mocha": "",
-        "request": ""
+        "request": "2.14.0",
+        "coffeelint": "",
+        "coffeestand": "",
+        "docco":"",
+        "pygments":"",
+        "zombie":"",
+        "chai":"",
+        "jscoverage": ""
     }
 }

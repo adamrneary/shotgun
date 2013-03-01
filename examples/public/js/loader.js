@@ -3,7 +3,6 @@ var loader;
 
 loader = new Shotgun.Loader({
   debug: true,
-  el: '#loader',
   url: {
     js: 'js/testapp.js?' + Math.random(),
     css: 'css/testapp.css?' + Math.random()
@@ -11,14 +10,11 @@ loader = new Shotgun.Loader({
   functions: [
     function(cb) {
       return setTimeout(function() {
-        console.log('fn ready');
         return cb();
       }, 1000);
     }
   ],
-  ready: function() {
-    return console.log('ready');
-  }
+  ready: function() {}
 });
 
 $(document).ready(function() {
