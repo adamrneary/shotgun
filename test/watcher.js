@@ -52,13 +52,22 @@ report = function (cb) {
   });
 };
 
+var watched = false
+var proc = null
 spec = function (cb) {
-  //proc = spawn(__dirname+'/../node_modules/mocha/bin/mocha',[__dirname+'/run.js', '-Gw','-R','spec','-s','20','--timeout','6000','--globals','d3,window,_$jscoverage,_$jscoverage_cond,_$jscoverage_done,_$jscoverage_init,_,browser'], {customFds: [0,1,2]})
+  path = __dirname+'/../src/scss/'
+  if (!watched) {
+    require('fs').watch(path,function(event,filename) {
+      if (proc) {
+        proc.kill()
+      }
+    });
+  }
   proc = spawn(__dirname+'/../node_modules/mocha/bin/mocha',[__dirname+'/run.js', '-Gw','-R','spec','-s','20','--timeout','6000','--globals','d3,window,_$jscoverage,_$jscoverage_cond,_$jscoverage_done,_$jscoverage_init,_,browser'], {stdio: 'inherit'})
-  //proc.stdout.pipe(process.stdout, {end: false})
   proc.on('exit',function() {
     start()
   });
 };
 
 start()
+
