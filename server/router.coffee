@@ -40,13 +40,13 @@ app.get '/test', (req,res)->
     contents = modules.fs.readFileSync path + f, 'utf-8'
     errors[f] = modules.coffeelint.lint contents
 
-  path2="#{__dirname}/../examples/public/coffee/"
+  path2 = "#{__dirname}/../examples/public/coffee/"
   files2 = modules.fs.readdirSync path2
   for t in files2
     contents = modules.fs.readFileSync path2 + t, 'utf-8'
     errors[t] = modules.coffeelint.lint contents
 
-  path3="#{__dirname}/../server/"
+  path3 = "#{__dirname}/../server/"
   files3 = modules.fs.readdirSync path3
   for d in files3
     if d.substr(-7) is ".coffee"

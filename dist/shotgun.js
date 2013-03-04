@@ -20,9 +20,9 @@ Shotgun.Loader = Loader = (function() {
 
   Loader.prototype.debug = false;
 
-  Loader.prototype.width = 960;
+  Loader.prototype.width = 300;
 
-  Loader.prototype.height = 500;
+  Loader.prototype.height = 300;
 
   Loader.prototype.twoPi = 2 * Math.PI;
 
@@ -73,18 +73,17 @@ Shotgun.Loader = Loader = (function() {
     var g,
       _this = this;
     this.el = d3.select('body').append('div').attr('id', 'shotgun');
-    this.arc = d3.svg.arc().startAngle(0).innerRadius(180).outerRadius(240);
+    this.arc = d3.svg.arc().startAngle(0).innerRadius(50).outerRadius(60);
     this.svg = this.el.append("svg").attr("width", this.width).attr("height", this.height);
     g = this.svg.append("g").attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")");
     this.meter = g.append("g").attr("class", "progress-meter");
     this.meter.append("path").attr("class", "background").attr("d", this.arc.endAngle(this.twoPi));
     this.foreground = this.meter.append("path").attr("class", "foreground");
-    this.text = this.meter.append("text").attr("text-anchor", "middle").attr("dy", ".35em");
+    this.text = this.meter.append("text").attr("text-anchor", "middle").attr("dy", "100px");
     return this.interval = setInterval(function() {
       if (_this.progress < 0.99) {
         _this.progress += 0.001;
-        _this.foreground.attr("d", _this.arc.endAngle(_this.twoPi * _this.progress));
-        return _this.text.text(_this.formatPercent(_this.progress));
+        return _this.foreground.attr("d", _this.arc.endAngle(_this.twoPi * _this.progress));
       }
     }, 10);
   };
