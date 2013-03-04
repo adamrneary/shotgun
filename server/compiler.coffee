@@ -7,15 +7,10 @@ coffeePath = "#{__dirname}/../node_modules/coffee-script/bin/coffee"
 module.exports.compile = (cb, skipAssets) ->
   compileCoffeeSrc ->
     joinAssets skipAssets, "#{__dirname}/../dist/#{glob.config.name}.js", ['d3'], ->
-      compileCoffeeTests ->
-      compileCoffeeExamples ->
-        switch glob.config.css
-          when 'less'
-            compileLess ->
-              cb() if cb
-          when 'scss'
-            compileScss ->
-              cb() if cb
+    compileCoffeeTests ->
+    compileCoffeeExamples ->
+      compileScss ->
+        cb() if cb
 
 joinAssets = (skip,dest,assets,cb)->
   if skip
@@ -83,11 +78,3 @@ compileScss = (cb) ->
         fs.writeFile "#{__dirname}/../dist/#{glob.config.name}.css", css, ->
           cb()
     , { include_paths: [ "#{__dirname}/../src/scss/"] }
-
-compileLess = (cb) ->
-  lesscPath = "#{__dirname}/../node_modules/less/bin/lessc"
-  lessDest = "#{__dirname}/../src/less/index.less"
-  child_process.exec "#{lesscPath} #{lessDest}", (err,stdout,stderr) ->
-    console.log 'less err: ',stderr if stderr
-    fs.writeFile "#{__dirname}/../dist/#{name}.css", stdout, ->
-      cb()

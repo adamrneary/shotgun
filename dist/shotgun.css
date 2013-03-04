@@ -12,11 +12,14 @@
     display: block;
     width: 100%;
     height: 100%; }
-  #shotgun .progress-meter .background {
+  #shotgun svg .background {
     fill: #000; }
-  #shotgun .progress-meter .foreground {
-    fill: #19affe; }
-  #shotgun .progress-meter text {
+  #shotgun svg .foreground {
+    fill: #30878F; }
+  #shotgun svg text {
+    position: absolute;
+    bottom: -30px;
+    margin: auto;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 24px;
     font-weight: bold; }
