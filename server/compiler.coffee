@@ -74,13 +74,13 @@ compileCoffeeExamples = (cb) ->
       cb()
 
 compileScss = (cb) ->
-  fs.readFile "#{__dirname}/../src/scss/shotgun.scss", (err, scssFile) ->
+  fs.readFile "#{__dirname}/../src/scss/#{glob.config.name}.scss", (err, scssFile) ->
     sass.render scssFile.toString(), (err, css) ->
       if err
         console.log err
         cb()
       else
-        fs.writeFile "#{__dirname}/../dist/shotgun.css", css, ->
+        fs.writeFile "#{__dirname}/../dist/#{glob.config.name}.css", css, ->
           cb()
     , { include_paths: [ "#{__dirname}/../src/scss/"] }
 
