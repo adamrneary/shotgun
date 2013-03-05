@@ -25,23 +25,14 @@ Shotgun.Loader = class Loader
     @options.el = 'body' unless @options.el
     @debug = @options.debug
 
-  log: (from,msg)->
-    if from and msg
-      console.log "Shotgun.Loader #{from}: #{msg}" if @debug
-    else if from
-      console.log from if @debug
-
   start: ->
     @formatPercent = d3.format(".0%")
-    @log 'start', 'options:'
-    @log @options
-    #@load 'script', @dependencies, 20, 'Loading dependencies...', =>
     @render()
     @loadScript =>
       @loadStyle =>
-        #@loadData =>
+        console.log 'apply'
         @applyFunctions =>
-          @log "start", "all ready, starting app"
+          console.log 'done'
           clearInterval @interval
           @options.ready @script,@data
           setTimeout =>
@@ -71,18 +62,20 @@ Shotgun.Loader = class Loader
   updateProgress: (progress)->
 
   loadScript: (cb)->
-    @log "loadScript", "loading #{@options.url.js}"
     loaded = false
     xhr = d3.xhr("#{@options.url.js}")
     xhr.on "progress", =>
       @transition @progress+((d3.event.loaded/@scriptLength)*@scriptMax)
     xhr.get (error, data)=>
+      #console.log data.response
       @script = data.response.toString()
+      #if data.response?
+      #else
+        #@script = ''
       @transition @scriptMax
       cb()
 
   loadStyle: (cb)->
-    @log "loadStyle", "loading #{@options.url.css}"
     xhr = d3.xhr("#{@options.url.css}")
     xhr.on "progress", =>
       @transition @progress+((d3.event.loaded/@styleLength)*@styleMax)
@@ -92,7 +85,6 @@ Shotgun.Loader = class Loader
       cb()
 
   loadData: (cb)->
-    @log "loadData", "loading data"
     xhr = d3.xhr("#{@options.url.data}")
     xhr.on "progress", =>
       @transition @progress+((d3.event.loaded/@dataLength)*@dataMax)
@@ -104,6 +96,7 @@ Shotgun.Loader = class Loader
 
   callRecursive: (i,cb)->
     if @options.functions[i]
+      console.log @options.functions[i]
       @options.functions[i] =>
         cur = @scriptMax+@styleMax+(i+1)*@dataMax/@options.functions.length
         if cur > @progress
@@ -117,7 +110,6 @@ Shotgun.Loader = class Loader
       cb()
 
   applyFunctions: (cb)->
-    @log "loadData", "loading data"
     #@interval = setInterval =>
       #if @progress < 0.99
         ##t = 0.001
@@ -130,7 +122,6 @@ Shotgun.Loader = class Loader
     @callRecursive 0,cb
 
   transition: (cur)->
-    console.log 'transition',cur if @debug
     cur = 99 if cur > 99
     d3.transition().tween "progress", =>
       (t) =>

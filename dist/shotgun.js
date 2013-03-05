@@ -36,28 +36,15 @@ Shotgun.Loader = Loader = (function() {
     this.debug = this.options.debug;
   }
 
-  Loader.prototype.log = function(from, msg) {
-    if (from && msg) {
-      if (this.debug) {
-        return console.log("Shotgun.Loader " + from + ": " + msg);
-      }
-    } else if (from) {
-      if (this.debug) {
-        return console.log(from);
-      }
-    }
-  };
-
   Loader.prototype.start = function() {
     var _this = this;
     this.formatPercent = d3.format(".0%");
-    this.log('start', 'options:');
-    this.log(this.options);
     this.render();
     return this.loadScript(function() {
       return _this.loadStyle(function() {
+        console.log('apply');
         return _this.applyFunctions(function() {
-          _this.log("start", "all ready, starting app");
+          console.log('done');
           clearInterval(_this.interval);
           _this.options.ready(_this.script, _this.data);
           return setTimeout(function() {
@@ -93,7 +80,6 @@ Shotgun.Loader = Loader = (function() {
   Loader.prototype.loadScript = function(cb) {
     var loaded, xhr,
       _this = this;
-    this.log("loadScript", "loading " + this.options.url.js);
     loaded = false;
     xhr = d3.xhr("" + this.options.url.js);
     xhr.on("progress", function() {
@@ -109,7 +95,6 @@ Shotgun.Loader = Loader = (function() {
   Loader.prototype.loadStyle = function(cb) {
     var xhr,
       _this = this;
-    this.log("loadStyle", "loading " + this.options.url.css);
     xhr = d3.xhr("" + this.options.url.css);
     xhr.on("progress", function() {
       return _this.transition(_this.progress + ((d3.event.loaded / _this.styleLength) * _this.styleMax));
@@ -124,7 +109,6 @@ Shotgun.Loader = Loader = (function() {
   Loader.prototype.loadData = function(cb) {
     var xhr,
       _this = this;
-    this.log("loadData", "loading data");
     xhr = d3.xhr("" + this.options.url.data);
     xhr.on("progress", function() {
       return _this.transition(_this.progress + ((d3.event.loaded / _this.dataLength) * _this.dataMax));
@@ -141,6 +125,7 @@ Shotgun.Loader = Loader = (function() {
   Loader.prototype.callRecursive = function(i, cb) {
     var _this = this;
     if (this.options.functions[i]) {
+      console.log(this.options.functions[i]);
       return this.options.functions[i](function() {
         var cur;
         cur = _this.scriptMax + _this.styleMax + (i + 1) * _this.dataMax / _this.options.functions.length;
@@ -160,15 +145,11 @@ Shotgun.Loader = Loader = (function() {
   };
 
   Loader.prototype.applyFunctions = function(cb) {
-    this.log("loadData", "loading data");
     return this.callRecursive(0, cb);
   };
 
   Loader.prototype.transition = function(cur) {
     var _this = this;
-    if (this.debug) {
-      console.log('transition', cur);
-    }
     if (cur > 99) {
       cur = 99;
     }

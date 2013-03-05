@@ -5,18 +5,12 @@ loader = new Shotgun.Loader
     js: 'js/testapp.js?'+Math.random()
     css: 'css/testapp.css?'+Math.random()
     #data: '/mocha'
-  functions: [
-    (cb)->
+  functions: [(cb)->
+      console.log 'fn1'
       setTimeout ->
         console.log 'fn ready'
         cb()
       , 1000
-      #window.app = new window.Testapp
-        #callback: cb
-  #,   (cb)->
-      #window.app.fun1 cb
-  #,   (cb)->
-      #window.app.fun2 cb
   ]
   ready: ->
     console.log 'ready'
