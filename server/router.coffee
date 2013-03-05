@@ -63,14 +63,25 @@ app.get '/test', (req,res)->
     name: glob.config.name
 
 app.get '/coverage', (req,res)->
+  cover = ''
+  coverPath = "#{__dirname}/../test/reports/coverage.html"
+  htmlBody = modules.fs.readFileSync coverPath, 'utf-8'
+  if htmlBody.length > 0
+    cover = htmlBody.substr(htmlBody.indexOf("<body>")+6, htmlBody.length - 14)
+  res.render 'coverage'
+    cover: cover
+    page: 'coverage'
+    name: glob.config.name
 
-  report = ''
-  try
-    destDir = __dirname+'/../test/reports/coverage.html'
-    report = glob.modules.fs.readFileSync destDir
-  res.setHeader 'Content-Type', 'text/html'
-  res.setHeader 'Content-Length', report.length
-  res.end report
+#app.get '/coverage', (req,res)->
+
+  #report = ''
+  #try
+    #destDir = __dirname+'/../test/reports/coverage.html'
+    #report = glob.modules.fs.readFileSync destDir
+  #res.setHeader 'Content-Type', 'text/html'
+  #res.setHeader 'Content-Length', report.length
+  #res.end report
 
 app.get '/styleguide', (req,res)->
   options =
