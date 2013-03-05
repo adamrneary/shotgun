@@ -18,3 +18,4 @@ examples/js/tablestakes.js
 test/cov/*
 test/reports/*
 test/docs/*
+npm-debug.log

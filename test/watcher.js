@@ -55,7 +55,7 @@ report = function (cb) {
 var watched = false
 var proc = null
 spec = function (cb) {
-  path = __dirname+'/../src/scss/'
+  path = __dirname+'/../src/scss/'+glob.config.name+'.scss'
   if (!watched) {
     require('fs').watch(path,function(event,filename) {
       if (proc) {
