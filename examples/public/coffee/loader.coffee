@@ -7,7 +7,7 @@ loader = new Shotgun.Loader
     (cb)->
       setTimeout ->
         cb()
-      , 15000
+      , 2000
   ]
   ready: ->
 

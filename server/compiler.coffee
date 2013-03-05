@@ -6,11 +6,11 @@ coffeePath = "#{__dirname}/../node_modules/coffee-script/bin/coffee"
 
 module.exports.compile = (cb, skipAssets) ->
   compileCoffeeSrc ->
-    joinAssets skipAssets, "#{__dirname}/../dist/#{glob.config.name}.js", ['d3'], ->
-    compileCoffeeTests ->
-    compileCoffeeExamples ->
-      compileScss ->
-        cb() if cb
+    joinAssets skipAssets, "#{__dirname}/../dist/#{glob.config.name}.js", ['d3','jquery-1.8.0'], ->
+      compileCoffeeTests ->
+      compileCoffeeExamples ->
+        compileScss ->
+          cb() if cb
 
 joinAssets = (skip,dest,assets,cb)->
   if skip
@@ -60,6 +60,7 @@ compileCoffeeExamples = (cb) ->
   command1 = "#{coffeePath} -o #{destDir} -cb #{srcDir}"
   command2 = "#{coffeePath} -p -cb #{srcDir}"
 
+  console.log command1
   child_process.exec command1, (err,stdout,stderr) ->
     if stderr
       child_process.exec command2, (err,stdout,stderr) ->

@@ -11,7 +11,7 @@ loader = new Shotgun.Loader({
     function(cb) {
       return setTimeout(function() {
         return cb();
-      }, 15000);
+      }, 2000);
     }
   ],
   ready: function() {}

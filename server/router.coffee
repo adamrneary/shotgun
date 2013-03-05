@@ -94,3 +94,8 @@ app.get "/css/#{name}.css", (req,res)->
   res.setHeader 'Content-Length', style.length
   res.end style
 
+app.get "/css/images/#{name}.png", (req,res)->
+  style = modules.fs.readFileSync "#{__dirname}/../src/images/#{name}.png"
+  res.setHeader 'Content-Type', 'image/png'
+  res.setHeader 'Content-Length', style.length
+  res.end style
