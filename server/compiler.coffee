@@ -6,7 +6,9 @@ coffeePath = "#{__dirname}/../node_modules/coffee-script/bin/coffee"
 
 module.exports.compile = (cb, skipAssets) ->
   compileCoffeeSrc ->
-    joinAssets skipAssets, "#{__dirname}/../dist/#{glob.config.name}.js", ['d3','jquery-1.8.0'], ->
+    path = "#{__dirname}/../dist/#{glob.config.name}.js"
+    assets = ['d3','jquery-1.8.0']
+    joinAssets skipAssets, path, assets, ->
       compileCoffeeTests ->
       compileCoffeeExamples ->
         compileScss ->
@@ -18,7 +20,8 @@ joinAssets = (skip,dest,assets,cb)->
   else
     result = ''
     for asset in assets
-      result += fs.readFileSync "#{__dirname}/../examples/public/libs/#{asset}.js"
+      path = "#{__dirname}/../examples/public/libs/#{asset}.js"
+      result += fs.readFileSync path
     result += fs.readFileSync dest
     fs.writeFile dest, result, (err)->
       cb() if cb
@@ -60,7 +63,6 @@ compileCoffeeExamples = (cb) ->
   command1 = "#{coffeePath} -o #{destDir} -cb #{srcDir}"
   command2 = "#{coffeePath} -p -cb #{srcDir}"
 
-  console.log command1
   child_process.exec command1, (err,stdout,stderr) ->
     if stderr
       child_process.exec command2, (err,stdout,stderr) ->
@@ -70,7 +72,8 @@ compileCoffeeExamples = (cb) ->
       cb()
 
 compileScss = (cb) ->
-  fs.readFile "#{__dirname}/../src/scss/#{glob.config.name}.scss", (err, scssFile) ->
+  path = "#{__dirname}/../src/scss/#{glob.config.name}.scss"
+  fs.readFile path, (err, scssFile) ->
     sass.render scssFile.toString(), (err, css) ->
       if err
         console.log err

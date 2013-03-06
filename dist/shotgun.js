@@ -9277,7 +9277,9 @@ Shotgun.Loader = Loader = (function() {
           clearInterval(_this.interval);
           _this.options.ready(_this.script, _this.data);
           return setTimeout(function() {
-            _this.meter.transition().delay(250).attr("transform", "scale(0)");
+            if (typeof process === "undefined" || process === null) {
+              _this.meter.transition().delay(250).attr("transform", "scale(0)");
+            }
             return _this.el.remove();
           }, 10);
         });
@@ -9286,14 +9288,16 @@ Shotgun.Loader = Loader = (function() {
   };
 
   Loader.prototype.render = function() {
-    var g,
+    var d, g, transform,
       _this = this;
     this.el = d3.select('body').append('div').attr('id', 'shotgun');
     this.arc = d3.svg.arc().startAngle(0).innerRadius(50).outerRadius(60);
     this.svg = this.el.append("svg").attr("width", this.width).attr("height", this.height);
-    g = this.svg.append("g").attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")");
+    transform = "translate(" + this.width / 2 + "," + this.height / 2 + ")";
+    g = this.svg.append("g").attr("transform", transform);
     this.meter = g.append("g").attr("class", "progress-meter");
-    this.meter.append("path").attr("class", "background").attr("d", this.arc.endAngle(this.twoPi));
+    d = this.arc.endAngle(this.twoPi);
+    this.meter.append("path").attr("class", "background").attr("d", d);
     this.foreground = this.meter.append("path").attr("class", "foreground");
     this.text = this.meter.append("text").attr("text-anchor", "middle").attr("dy", "100px");
     return this.interval = setInterval(function() {
@@ -9308,12 +9312,12 @@ Shotgun.Loader = Loader = (function() {
     var loaded, xhr,
       _this = this;
     loaded = false;
-    xhr = d3.xhr("" + this.options.url.js);
+    xhr = d3.xhr("" + this.options.url.js, 'text/javascript');
     xhr.on("progress", function() {
       return _this.transition(_this.progress + ((d3.event.loaded / _this.scriptLength) * _this.scriptMax));
     });
     return xhr.get(function(error, data) {
-      _this.script = data.response.toString();
+      _this.script = data.responseText;
       _this.transition(_this.scriptMax);
       return cb();
     });
@@ -9327,7 +9331,7 @@ Shotgun.Loader = Loader = (function() {
       return _this.transition(_this.progress + ((d3.event.loaded / _this.styleLength) * _this.styleMax));
     });
     return xhr.get(function(error, data) {
-      d3.select('head').append('style').html(data.response);
+      d3.select('head').append('style').html(data.responseText);
       _this.transition(_this.scriptMax + _this.styleMax);
       return cb();
     });

@@ -4,47 +4,32 @@ window.Testapp = (function() {
 
   function Testapp(options) {
     var _this = this;
-    console.log('testapp initialize');
-    $.ajax({
-      url: "http://nominatim.openstreetmap.org/search?city=Moscow&format=json&polygon=1&" + Math.random(),
-      success: function() {
-        console.log('testapp init, 1 data loaded');
-        if (options.callback) {
-          return options.callback();
-        }
+    setTimeout(function() {
+      if (options.callback) {
+        return options.callback();
       }
-    });
+    }, 1000);
   }
 
   Testapp.prototype.fun1 = function(cb) {
     var _this = this;
-    return $.ajax({
-      url: "http://nominatim.openstreetmap.org/search?city=Paris&format=json&polygon=1&" + Math.random(),
-      success: function() {
-        console.log('testapp fun1');
-        if (cb) {
-          return cb();
-        }
+    return setTimeout(function() {
+      if (cb) {
+        return cb();
       }
-    });
+    }, 1000);
   };
 
   Testapp.prototype.fun2 = function(cb) {
     var _this = this;
-    return $.ajax({
-      url: "http://nominatim.openstreetmap.org/search?query=Sidney&format=json&polygon=1&" + Math.random(),
-      success: function() {
-        console.log('testapp fun2');
-        if (cb) {
-          return cb();
-        }
+    return setTimeout(function() {
+      if (cb) {
+        return cb();
       }
-    });
+    }, 1000);
   };
 
-  Testapp.prototype.ready = function() {
-    return console.log('all ready');
-  };
+  Testapp.prototype.ready = function() {};
 
   return Testapp;
 

@@ -34,7 +34,9 @@ Shotgun.Loader = class Loader
           clearInterval @interval
           @options.ready @script,@data
           setTimeout =>
-            @meter.transition().delay(250).attr "transform", "scale(0)"
+            #fix for zombiejs tests
+            unless process?
+              @meter.transition().delay(250).attr "transform", "scale(0)"
             @el.remove()
           , 10
 
@@ -42,11 +44,19 @@ Shotgun.Loader = class Loader
     @el = d3.select('body').append('div').attr('id','shotgun')
     @arc = d3.svg.arc().startAngle(0).innerRadius(50).outerRadius(60)
     @svg = @el.append("svg").attr("width", @width).attr("height", @height)
-    g = @svg.append("g").attr("transform", "translate(" + @width / 2 + "," + @height / 2 + ")")
+
+    transform = "translate(" + @width / 2 + "," + @height / 2 + ")"
+    g = @svg.append("g").attr("transform", transform)
+
     @meter = g.append("g").attr("class", "progress-meter")
-    @meter.append("path").attr("class", "background").attr "d", @arc.endAngle(@twoPi)
+
+    d = @arc.endAngle(@twoPi)
+    @meter.append("path").attr("class", "background").attr("d", d)
+
     @foreground = @meter.append("path").attr("class", "foreground")
-    @text = @meter.append("text").attr("text-anchor", "middle").attr("dy", "100px")
+    @text = @meter.append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", "100px")
 
     @interval = setInterval =>
       if @progress < 0.99
@@ -56,11 +66,11 @@ Shotgun.Loader = class Loader
 
   loadScript: (cb)->
     loaded = false
-    xhr = d3.xhr("#{@options.url.js}")
+    xhr = d3.xhr("#{@options.url.js}",'text/javascript')
     xhr.on "progress", =>
       @transition @progress+((d3.event.loaded/@scriptLength)*@scriptMax)
     xhr.get (error, data)=>
-      @script = data.response.toString()
+      @script = data.responseText
       @transition @scriptMax
       cb()
 
@@ -69,7 +79,7 @@ Shotgun.Loader = class Loader
     xhr.on "progress", =>
       @transition @progress+((d3.event.loaded/@styleLength)*@styleMax)
     xhr.get (error, data)=>
-      d3.select('head').append('style').html data.response
+      d3.select('head').append('style').html data.responseText
       @transition @scriptMax+@styleMax
       cb()
 
