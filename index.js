@@ -1,9 +1,10 @@
 
 /**
- * Module dependencies.
+ * Local variables.
  */
 
 var Storage = require('storage');
+var storage = new Storage('shotgun');
 
 /**
  * Expose constructor.
@@ -12,7 +13,7 @@ var Storage = require('storage');
 module.exports = Shotgun;
 
 /**
- * create `Shotgun` instance.
+ * Create `Shotgun` instance.
  *
  * @param {Object} options
  */
@@ -22,9 +23,15 @@ function Shotgun(options) {
 }
 
 /**
+ * Shotcut to clear shotgun cache.
+ */
+
+Shotgun.clear = storage.clear;
+
+/**
  * Sync local storage with server.
  *
- * @options {Function} cb
+ * @param {Function} cb
  */
 
 Shotgun.prototype.sync = function(cb) {
