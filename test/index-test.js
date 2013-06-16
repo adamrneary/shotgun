@@ -1,6 +1,11 @@
 describe('Shotgun', function() {
-  var expect  = chai.expect;
-  var rawData = window.rawData;
+  var expect    = chai.expect;
+  var bootstrap = window.bootstrap;
+  var Shotgun   = require('shotgun');
+
+  beforeEach(function(done) {
+    Shotgun.clear(done);
+  });
 
   describe('Empty storage', function() {
 

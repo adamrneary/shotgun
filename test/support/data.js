@@ -1,5 +1,5 @@
 (function(exports) {
-  exports.rawData = function(time) {
+  exports.bootstrap = function(time) {
     return [];
   };
-}).call(exports || window);
+}).call(null, exports || window);
