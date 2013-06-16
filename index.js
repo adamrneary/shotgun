@@ -4,6 +4,7 @@
  */
 
 var Storage = require('storage');
+var bind    = require('bind');
 var storage = new Storage('shotgun');
 
 /**
@@ -23,10 +24,10 @@ function Shotgun(options) {
 }
 
 /**
- * Shotcut to clear shotgun cache.
+ * Clear shotgun's cache.
  */
 
-Shotgun.clear = storage.clear;
+Shotgun.clear = bind(storage, 'clear');
 
 /**
  * Sync local storage with server.
@@ -35,5 +36,5 @@ Shotgun.clear = storage.clear;
  */
 
 Shotgun.prototype.sync = function(cb) {
-  cb(null, []);
+  cb(null, {});
 };
