@@ -1,29 +1,15 @@
 {
-  "name": "Shotgun",
-  "version": "0.0.2",
-  "private": true,
   "scripts": {
-    "test": "node test/test.js",
-    "start": "node test/watcher.js"
+    "postinstall": "./node_modules/component/bin/component install",
+    "test": "./node_modules/testem/testem.js -f test/testem.json ci",
+    "start": "./node_modules/testem/testem.js -f test/testem.json",
+    "build": "./node_modules/component/bin/component build",
+    "release": "./node_modules/component/bin/component build --standalone Shotgun && mv build/build.js dist/shotgun.js",
+    "stat": "cloc index.js --quiet && cloc test/ --quiet"
   },
-  "engines": {
-    "node": "0.8.14",
-    "npm": "1.1.x"
-  },
-  "dependencies": {
-    "express": "3.0.6",
-    "jade": "",
-    "coffee-script": "1.4.0",
-    "node-sass": "",
-    "kss": "",
-    "mocha": "",
-    "request": "2.14.0",
-    "coffeelint": "",
-    "coffeestand": "",
-    "docco":"",
-    "pygments":"",
-    "zombie":"",
-    "chai":"",
-    "jscoverage": ""
+  "devDependencies": {
+    "component": "*",
+    "chai": "*",
+    "testem": "*"
   }
 }
