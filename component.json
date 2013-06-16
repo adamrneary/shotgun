@@ -10,7 +10,8 @@
   ],
   "dependencies": {
     "ask11/storage": "*",
-    "component/bind": "*"
+    "component/bind": "*",
+    "learnboost/jsonp": "*"
   },
   "development": {},
   "main": "index.js",

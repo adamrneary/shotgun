@@ -5,6 +5,7 @@
 
 var Storage = require('storage');
 var bind    = require('bind');
+var jsonp   = require('jsonp');
 var storage = new Storage('shotgun');
 
 /**
@@ -20,7 +21,7 @@ module.exports = Shotgun;
  */
 
 function Shotgun(options) {
-  this.options = options;
+  this.url = options.url.match(/^http/) ? options.url : location.origin + options.url;
 }
 
 /**
@@ -36,5 +37,5 @@ Shotgun.clear = bind(storage, 'clear');
  */
 
 Shotgun.prototype.sync = function(cb) {
-  cb(null, {});
+  jsonp(this.url, cb);
 };

@@ -5,6 +5,7 @@
   "launch_in_ci": ["phantomjs"],
   "src_files": [
     "index.js",
+    "test/support/*",
     "test/*"
   ],
   "serve_files": [
