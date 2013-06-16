@@ -1,14 +1,13 @@
 {
   "name": "shotgun",
   "repo": "activecell/shotgun",
-  "description": "A bad-ass synced storage",
-  "version": "0.0.1",
-  "keywords": [],
+  "description": "A bad-ass bulletproof synced storage.",
+  "version": "0.1.0",
+  "keywords": ["sync", "storage", "activecell"],
   "dependencies": {
     "ask11/storage": "*"
   },
   "development": {},
-  "license": "MIT",
   "main": "index.js",
   "scripts": [
     "index.js"

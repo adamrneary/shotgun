@@ -8,8 +8,8 @@
     "stat": "cloc index.js --quiet && cloc test/ --quiet"
   },
   "devDependencies": {
-    "component": "*",
-    "chai": "*",
-    "testem": "*"
+    "component": "~0.16.3",
+    "chai": "~1.6.1",
+    "testem": "~0.2.98"
   }
 }
