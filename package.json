@@ -1,15 +1,16 @@
 {
   "scripts": {
     "postinstall": "./node_modules/component/bin/component install",
-    "test": "./node_modules/testem/testem.js -f test/testem.json ci",
-    "start": "./node_modules/testem/testem.js -f test/testem.json",
+    "test": "./test/server/start && ./node_modules/testem/testem.js -f test/testem.json ci && ./test/server/stop",
+    "start": "./test/server/start && ./node_modules/testem/testem.js -f test/testem.json && ./test/server/stop",
     "build": "./node_modules/component/bin/component build",
     "release": "./node_modules/component/bin/component build --standalone Shotgun && mv build/build.js dist/shotgun.js",
-    "stat": "cloc index.js --quiet && cloc test/ --quiet"
+    "stat": "cloc index.js --quiet && cloc test/*.js --quiet"
   },
   "devDependencies": {
     "component": "~0.16.3",
     "chai": "~1.6.1",
-    "testem": "~0.2.98"
+    "testem": "~0.2.98",
+    "express": "~3.2.6"
   }
 }
