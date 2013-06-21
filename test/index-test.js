@@ -1,10 +1,10 @@
-mocha.setup({ globals: ['__jp0', '__jp1', '__jp2', '__jp3', '__jp4', '__jp5'] });
+mocha.setup({ globals: ['__jp0', '__jp1', '__jp2', '__jp3', '__jp4', '__jp5', '__jp6', '__jp7'] });
 
 describe('Shotgun', function() {
   var Shotgun = require('shotgun');
   var Storage = require('storage');
-  var expect  = chai.expect;
   var jsonp   = require('jsonp');
+  var expect  = chai.expect;
   var shotgun;
 
   beforeEach(function(done) {
@@ -40,11 +40,11 @@ describe('Shotgun', function() {
     });
 
     it('returns arrays with custom ids', function() {
-      expect(data.financial_summary).length(4);
+      expect(data.financial_summary).length(5);
     });
 
     it('returns objects', function() {
-      expect(Object.keys(data.color_scheme)).length(6);
+      expect(Object.keys(data.color_scheme)).length(7);
     });
   });
 
@@ -52,7 +52,7 @@ describe('Shotgun', function() {
     beforeEach(function(done) {
       shotgun.reset(bootstrap.all(), function(err) {
         if (err) return done(err);
-        setTimeout(done, 10); // emulate waiting
+        setTimeout(done, 5); // emulate waiting
       });
     });
 
@@ -61,7 +61,7 @@ describe('Shotgun', function() {
         expect(Object.keys(data)).length(6);
         expect(data.periods).length(12);
         expect(data.vendors).length(3);
-        expect(data.financial_summary).length(4);
+        expect(data.financial_summary).length(5);
         done(err);
       });
     });
@@ -72,6 +72,7 @@ describe('Shotgun', function() {
           expect(Object.keys(data)).length(6);
           expect(data.vendors).length(2); // one vendor removed
           expect(data.tasks).length(1); // new task added
+          expect(data.financial_summary).length(5); // changed
           expect(_.first(data.accounts).account_number).equal('20101'); // one account changed
           done(err1 || err2);
         });
