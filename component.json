@@ -1,0 +1,24 @@
+{
+  "name": "shotgun",
+  "repo": "activecell/shotgun",
+  "description": "A bad-ass bulletproof synced storage.",
+  "version": "0.1.0",
+  "keywords": [
+    "sync",
+    "storage",
+    "activecell"
+  ],
+  "dependencies": {
+    "ask11/storage": "*",
+    "component/bind": "*",
+    "learnboost/jsonp": "*",
+    "component/object": "*",
+    "component/type": "*",
+    "component/each": "*"
+  },
+  "development": {},
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}
