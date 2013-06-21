@@ -11,7 +11,7 @@
   "serve_files": [
     "node_modules/chai/chai.js",
     "build/build.js",
-    "test/support/data.js",
+    "test/support/bootstrap.js",
     "test/index-test.js"
   ]
 }
