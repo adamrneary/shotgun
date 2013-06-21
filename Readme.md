@@ -18,7 +18,7 @@ var Shotgun = require('shotgun')
 var shotgun = new Shotgun({
   id: app.company.id,
   url: '/bootstrap.json',
-  controlField: 'periods'
+  field: 'periods'
 });
 
 shotgun.sync(function(err, data) {
@@ -38,19 +38,28 @@ Shotgun.clear();
 
   * `id` - storage id. For example when user switches between different companies and different sets of data
   * `url` - sync url. Url should be able to return all necessary data and handle `?t=time` params to return updated or removed data.
-  * `controlField` - Select one collection, which serves always. It's necessary to control db reseeds.
+  * `field` - Select one collection, which serves always. It's necessary to control db reseeds.
   * `disable`[optional] - disable shotgun and use it as a simple proxy for `$.getJSON`. Useful on early stages of development.
 
 ### Shotgun.clear([cb])
 
   Clear all data cached by shotgun.
 
-### shotgun.sync(cb)
+### #sync(cb)
 
   Sync local storage with server. Callback gets 2 paramethers:
 
   * `err` - handle error if something bad happened
   * `data` - synced data
+
+### #reset(data, cb)
+
+  Reset storage for current set of data.
+  Example to clear storage:
+
+```js
+shotgun.reset({}, function() {})
+```
 
 ## Development
 
