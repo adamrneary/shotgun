@@ -9,8 +9,8 @@
     "test/*"
   ],
   "serve_files": [
-    "build/build.js",
     "node_modules/chai/chai.js",
+    "build/build.js",
     "test/support/data.js",
     "test/index-test.js"
   ]
