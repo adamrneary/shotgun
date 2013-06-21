@@ -1,8 +1,5 @@
 mocha.setup({ globals: ['__jp0', '__jp1', '__jp2', '__jp3', '__jp4', '__jp5'] });
 
-// test resetTime
-// test keys by different ids
-
 describe('Shotgun', function() {
   var Shotgun    = require('shotgun');
   var expect     = chai.expect;

@@ -38,7 +38,11 @@ Shotgun.clear = bind(storage, 'clear');
  */
 
 Shotgun.prototype.sync = function(cb) {
-  jsonp(this.url, resetTime(this, cb));
+  var that = this;
+  storage.get(timeAttr(this), function(err, time) {
+    var url = time ? that.url + '?t=' + time : that.url;
+    jsonp(url, resetTime(that, cb));
+  });
 };
 
 /**
@@ -60,8 +64,16 @@ Shotgun.prototype.reset = function(data, cb) {
 function resetTime(that, cb) {
   var time = Date.now();
   return function(err1, data) {
-    storage.put(that.id + '-time', time, function(err2) {
+    storage.put(timeAttr(that), time, function(err2) {
       cb(err1 || err2, data);
     });
   };
+}
+
+/**
+ * Helper which returns time attribute
+ */
+
+function timeAttr(that) {
+  return that.id + '-time';
 }
