@@ -1,4 +1,6 @@
-mocha.setup({ globals: ['__jp0', '__jp1', '__jp2', '__jp3', '__jp4', '__jp5', '__jp6', '__jp7'] });
+var globals = [];
+for (var i = 0; i < 20; i++) globals.push('__jp' + i);
+mocha.setup({ globals: globals});
 
 describe('Shotgun', function() {
   var Shotgun = require('shotgun');
@@ -8,13 +10,15 @@ describe('Shotgun', function() {
   var shotgun;
 
   beforeEach(function(done) {
-    Shotgun.clear(function(err) {
-      shotgun = new Shotgun({
-        id: '51bd6acd3af29d123999afc1',
-        url: 'http://localhost:7358/bootstrap.json',
-        controlField: 'periods'
+    jsonp('http://localhost:7358/reset.json', function(err1) {
+      Shotgun.clear(function(err2) {
+        shotgun = new Shotgun({
+          id: '51bd6acd3af29d123999afc1',
+          url: 'http://localhost:7358/bootstrap.json',
+          controlField: 'periods'
+        });
+        done(err1 || err2);
       });
-      done(err);
     });
   });
 
