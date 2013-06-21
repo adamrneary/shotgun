@@ -23,11 +23,7 @@ var shotgun = new Shotgun({
 
 shotgun.sync(function(err, data) {
   // do something with data
-  // ...
 });
-
-// Clear shotgun's cache, if you need to test it in development
-Shotgun.clear();
 ```
 
 ## API
