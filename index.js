@@ -24,9 +24,10 @@ module.exports = Shotgun;
  */
 
 function Shotgun(options) {
-  this.id    = options.id;
-  this.url   = options.url.match(/^http/) ? options.url : location.origin + options.url;
-  this.field = options.field;
+  this.id      = options.id;
+  this.url     = options.url.match(/^http/) ? options.url : location.origin + options.url;
+  this.field   = options.field;
+  this.disable = !! options.disable;
 }
 
 /**
@@ -43,12 +44,16 @@ Shotgun.clear = bind(storage, 'clear');
 
 Shotgun.prototype.sync = function(cb) {
   var that = this;
-  storage.get(timeAttr(this), function(err, time) {
-    if (time)
-      jsonp(that.url + '?t=' + time, handleRequest(that, cb));
-    else
-      jsonp(that.url, reset(that, Date.now(), cb));
-  });
+  if (this.disable) {
+    jsonp(that.url, cb);
+  } else {
+    storage.get(timeAttr(this), function(err, time) {
+      if (time)
+        jsonp(that.url + '?t=' + time, handleRequest(that, cb));
+      else
+        jsonp(that.url, reset(that, Date.now(), cb));
+    });
+  }
 };
 
 /**

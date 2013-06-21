@@ -1,5 +1,5 @@
 var globals = [];
-for (var i = 0; i < 30; i++) globals.push('__jp' + i);
+for (var i = 0; i < 40; i++) globals.push('__jp' + i);
 mocha.setup({ globals: globals});
 
 describe('Shotgun', function() {
@@ -150,6 +150,35 @@ describe('Shotgun', function() {
       expect(data.vendors).length(3);
       expect(data.financial_summary).length(5);
       expect(Object.keys(data2)).length(0);
+    });
+  });
+
+  describe('Disabled', function() {
+    var data;
+
+    beforeEach(function(done) {
+      shotgun.disable = true;
+      shotgun.sync(function(err, result) {
+        data = result;
+        done(err);
+      });
+    });
+
+    it('returns all data', function() {
+      expect(Object.keys(data)).length(6);
+      expect(data.periods).length(12);
+      expect(data.vendors).length(3);
+      expect(data.accounts).length(2);
+      expect(data.tasks).length(0);
+      expect(data.financial_summary).length(5);
+      expect(Object.keys(data.color_scheme)).length(7);
+    });
+
+    it('does not store anything', function(done) {
+      storage.all(function(err, values) {
+        expect(Object.keys(values)).length(0);
+        done(err);
+      });
     });
   });
 
