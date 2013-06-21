@@ -1,16 +1,16 @@
 mocha.setup({ globals: ['__jp0', '__jp1', '__jp2', '__jp3', '__jp4', '__jp5'] });
 
 describe('Shotgun', function() {
-  var Shotgun    = require('shotgun');
-  var expect     = chai.expect;
-  var company1Id = '51bd6acd3af29d123999afc1';
-  var company2Id = '81bd6caa3af29d123999afc2';
-  var data, shotgun;
+  var Shotgun = require('shotgun');
+  var Storage = require('storage');
+  var expect  = chai.expect;
+  var jsonp   = require('jsonp');
+  var shotgun;
 
   beforeEach(function(done) {
     Shotgun.clear(function(err) {
       shotgun = new Shotgun({
-        id: company1Id,
+        id: '51bd6acd3af29d123999afc1',
         url: 'http://localhost:7358/bootstrap.json',
         controlField: 'periods'
       });
@@ -19,6 +19,8 @@ describe('Shotgun', function() {
   });
 
   describe('Empty storage', function() {
+    var data;
+
     beforeEach(function(done) {
       shotgun.sync(function(err, result) {
         data = result;
@@ -48,21 +50,97 @@ describe('Shotgun', function() {
 
   describe('Not empty', function() {
     beforeEach(function(done) {
-      shotgun.reset(bootstrap(), done);
+      shotgun.reset(bootstrap.all(), function(err) {
+        if (err) return done(err);
+        setTimeout(done, 10); // emulate waiting
+      });
     });
 
     it('bootstrap returns nothing', function(done) {
       shotgun.sync(function(err, data) {
+        expect(Object.keys(data)).length(6);
         expect(data.periods).length(12);
-        expect(data.vendors).length(0);
-        expect(data.accounts).length(0);
-        expect(data.financial_summary).length(0);
+        expect(data.vendors).length(3);
+        expect(data.financial_summary).length(4);
         done(err);
       });
     });
 
-    it('bootstrap returns updated and deleted records');
-    it('change id');
-    it('reseed');
+    it('bootstrap returns updated and deleted records', function(done) {
+      jsonp('http://localhost:7358/change-data.json', function(err1) {
+        shotgun.sync(function(err2, data) {
+          expect(Object.keys(data)).length(6);
+          expect(data.vendors).length(2); // one vendor removed
+          expect(data.tasks).length(1); // new task added
+          expect(_.first(data.accounts).account_number).equal('20101'); // one account changed
+          done(err1 || err2);
+        });
+      });
+    });
+
+    it('handle reseed event', function(done) {
+      jsonp('http://localhost:7358/reseed.json', function(err1) {
+        shotgun.sync(function(err2, data) {
+          var oldPeriods = joinPeriods(bootstrap.all().periods);
+          var newPeriods = joinPeriods(data.periods);
+          expect(oldPeriods).not.equal(newPeriods);
+
+          expect(Object.keys(data)).length(7);
+          expect(data.financial_summary).length(6);
+          done(err1 || err2);
+        });
+      });
+    });
   });
+
+  describe('supports multiply instances', function() {
+    var shotgun2, data, data2;
+
+    beforeEach(function(done) {
+      shotgun2 = new Shotgun({
+        id: '81bd6caa3af29d123999afc2',
+        url: 'http://localhost:7358/bootstrap2.json',
+        controlField: 'periods'
+      });
+
+      shotgun.sync(function(err1, result) {
+        data = result;
+        shotgun2.sync(function(err2, result2) {
+          data2 = result2;
+          done(err1 || err2);
+        });
+      });
+    });
+
+    it('stores data separately', function(done) {
+      var storage = new Storage('shotgun');
+      storage.all(function(err, values) {
+        var keys = Object.keys(values);
+        expect(keys).length(4);
+        expect(keys).includes('81bd6caa3af29d123999afc2');
+        expect(keys).includes('81bd6caa3af29d123999afc2-time');
+        expect(keys).includes('51bd6acd3af29d123999afc1');
+        expect(keys).includes('51bd6acd3af29d123999afc1-time');
+        done(err);
+      });
+    });
+
+    it('has different sets of data', function(done) {
+      expect(Object.keys(data)).length(6);
+      expect(data.vendors).length(3);
+      expect(data.financial_summary).length(4);
+
+      expect(Object.keys(data2)).length(6);
+      expect(data2.vendors).length(1);
+      expect(data2.financial_summary).length(0);
+    });
+  });
+
+  /**
+   * Helpers
+   */
+
+  function joinPeriods(periods) {
+    return periods.map(function(period) { return period.id; }).join('');
+  }
 });
