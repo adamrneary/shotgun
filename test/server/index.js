@@ -10,6 +10,10 @@ app.get('/bootstrap.json', function(req, res) {
   res.jsonp(200, bootstrap.all(req.query.t));
 });
 
+app.get('/bootstrap2.json', function(req, res) {
+  res.jsonp(200, {});
+});
+
 app.get('/change-data.json', function(req, res) {
   bootstrap.hasChange = true;
   res.jsonp(200, {});

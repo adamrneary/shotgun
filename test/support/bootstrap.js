@@ -16,8 +16,9 @@
     return prefix + sufix;
   }
 
-  function getData(options) {
+  function getData(method) {
     return function(time) {
+      var options = method(time);
       if (time)
         return bootstrap.hasChange ? options.changed : options.nothing;
       else
@@ -25,7 +26,7 @@
     };
   }
 
-  var vendors = getData({
+  var vendors = getData(function(){ return {
     nothing: [],
     all: [
       { updated_at: '2013-03-29T18:21:44Z', name: 'Mutually Human', id: id('014') },
@@ -35,9 +36,9 @@
     changed: [
       { deleted_at: '2013-05-01:21:44Z', updated_at: '2013-05-01:21:44Z', name: 'Tumblr', id: id('016') }
     ]
-  });
+  };});
 
-  var accounts = getData({
+  var accounts = getData(function(){ return {
     nothing: [],
     all: [
       { updated_at: '2013-04-14T11:22:04Z', account_number: '20100', id: id('017') },
@@ -46,17 +47,17 @@
     changed: [
       { updated_at: '2013-05-01:19:14Z', account_number: '20101', id: id('017') }
     ]
-  });
+  };});
 
-  var tasks = getData({
+  var tasks = getData(function(){ return {
     nothing: [],
     all: [],
     changed: [
       { updated_at: '2013-05-01:19:14Z', name: 'Simple task', id: id('018') }
     ]
-  });
+  };});
 
-  var financialSummary = getData({
+  var financialSummary = getData(function(){ return {
     nothing: [],
     all: [
       { updated_at: '2013-03-29T18:21:44Z', period_id: id('004'), account_id: id('017'), amount_cents: -355.0, id: id('019') },
@@ -68,9 +69,9 @@
     changed: [
       { updated_at: '2013-06-12T10:56:00Z', period_id: id('004'), account_id: id('017'), vendor_id: '5155dbba2bc51f31710000f9', amount_cents: 1181.0, id: id('023') }
     ]
-  });
+  };});
 
-  var colorScheme = getData({
+  var colorScheme = getData(function(){ return {
     nothing: {},
     all: {
       updated_at: '2013-04-14T11:22:04Z',
@@ -90,7 +91,7 @@
       primary_dark: '#333333',
       id: id('013')
     }
-  });
+  };});
 
   bootstrap.all = function(time) {
     return {

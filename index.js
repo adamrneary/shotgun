@@ -24,8 +24,9 @@ module.exports = Shotgun;
  */
 
 function Shotgun(options) {
-  this.id  = options.id;
-  this.url = options.url.match(/^http/) ? options.url : location.origin + options.url;
+  this.id    = options.id;
+  this.url   = options.url.match(/^http/) ? options.url : location.origin + options.url;
+  this.field = options.field;
 }
 
 /**
@@ -67,10 +68,10 @@ Shotgun.prototype.reset = function(data, cb) {
  */
 
 function reset(that, time, cb) {
-  return function(err1, data) {
+  return function(err, data) {
     storage.put(timeAttr(that), time, function(err2) {
       storage.put(that.id, data, function(err3) {
-        cb(err1 || err2 || err3, data);
+        cb(err || err2 || err3, data);
       });
     });
   };
@@ -82,13 +83,16 @@ function reset(that, time, cb) {
 
 function handleRequest(that, cb) {
   var time = Date.now();
-  return function(err1, data) {
+  return function(err, data) {
     storage.get(that.id, function(err2, oldData) {
+      if (!sameStore(data[that.field], oldData[that.field]))
+        return reload(that, cb);
+
       each(object.keys(data), function(key) {
         data[key] = merge(data[key], oldData[key]);
       });
 
-      reset(that, time, cb)(err1 || err2, data);
+      reset(that, time, cb)(err || err2, data);
     });
   };
 }
@@ -129,4 +133,24 @@ function getIds(array) {
 
 function timeAttr(that) {
   return that.id + '-time';
+}
+
+/**
+ * Check that data was not reseeded
+ */
+
+function sameStore(data, oldData) {
+  var newIds = object.keys(getIds(data)).join('');
+  var ids    = object.keys(getIds(oldData)).join('');
+  return newIds === ids;
+}
+
+/**
+ * Reload storage when data was reseeded
+ */
+
+function reload(that, cb) {
+  storage.del(timeAttr(that), function(err) {
+    err ? cb(err) : that.sync(cb);
+  });
 }
