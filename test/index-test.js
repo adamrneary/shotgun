@@ -1,11 +1,12 @@
 var globals = [];
-for (var i = 0; i < 20; i++) globals.push('__jp' + i);
+for (var i = 0; i < 30; i++) globals.push('__jp' + i);
 mocha.setup({ globals: globals});
 
 describe('Shotgun', function() {
   var Shotgun = require('shotgun');
   var Storage = require('storage');
   var jsonp   = require('jsonp');
+  var storage = new Storage('shotgun');
   var expect  = chai.expect;
   var shotgun;
 
@@ -50,14 +51,28 @@ describe('Shotgun', function() {
     it('returns objects', function() {
       expect(Object.keys(data.color_scheme)).length(7);
     });
+
+    it('stores data to storage', function(done) {
+      storage.all(function(err, values) {
+        var keys = Object.keys(values);
+        expect(keys).length(2);
+        expect(keys).include('51bd6acd3af29d123999afc1');
+        expect(keys).include('51bd6acd3af29d123999afc1-time');
+        done(err);
+      });
+    });
+
+    it('saves time', function(done) {
+      storage.get('51bd6acd3af29d123999afc1-time', function(err, time) {
+        expect(time).closeTo(Date.now(), 50);
+        done(err);
+      });
+    });
   });
 
   describe('Not empty', function() {
     beforeEach(function(done) {
-      shotgun.reset(bootstrap.all(), function(err) {
-        if (err) return done(err);
-        setTimeout(done, 5); // emulate waiting
-      });
+      shotgun.reset(bootstrap.all(), done);
     });
 
     it('bootstrap returns nothing', function(done) {
@@ -86,12 +101,13 @@ describe('Shotgun', function() {
     it('handle reseed event', function(done) {
       jsonp('http://localhost:7358/reseed.json', function(err1) {
         shotgun.sync(function(err2, data) {
-          var oldPeriods = joinPeriods(bootstrap.all().periods);
-          var newPeriods = joinPeriods(data.periods);
-          expect(oldPeriods).not.equal(newPeriods);
-
-          expect(Object.keys(data)).length(7);
-          expect(data.financial_summary).length(6);
+          var oldData = bootstrap.all();
+          expect(joinIds(oldData.periods)).not.equal(joinIds(data.periods));
+          expect(joinIds(oldData.vendors)).not.equal(joinIds(data.vendors));
+          expect(joinIds(oldData.accounts)).not.equal(joinIds(data.accounts));
+          expect(joinIds(oldData.financial_summary)).not.equal(joinIds(data.financial_summary));
+          expect(oldData.color_scheme).not.equal(data.color_scheme);
+          expect(data.tasks).length(0);
           done(err1 || err2);
         });
       });
@@ -118,7 +134,6 @@ describe('Shotgun', function() {
     });
 
     it('stores data separately', function(done) {
-      var storage = new Storage('shotgun');
       storage.all(function(err, values) {
         var keys = Object.keys(values);
         expect(keys).length(4);
@@ -145,7 +160,7 @@ describe('Shotgun', function() {
    * Helpers
    */
 
-  function joinPeriods(periods) {
-    return periods.map(function(period) { return period.id; }).join('');
+  function joinIds(items) {
+    return items.map(function(item) { return item.id; }).join('');
   }
 });

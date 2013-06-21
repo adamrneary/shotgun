@@ -46,7 +46,7 @@ Shotgun.prototype.sync = function(cb) {
     if (time)
       jsonp(that.url + '?t=' + time, handleRequest(that, cb));
     else
-      jsonp(that.url, resetTime(that, cb));
+      jsonp(that.url, reset(that, Date.now(), cb));
   });
 };
 
@@ -58,7 +58,7 @@ Shotgun.prototype.sync = function(cb) {
  */
 
 Shotgun.prototype.reset = function(data, cb) {
-  storage.put(this.id, data, resetTime(this, cb));
+  reset(this, Date.now(), cb)(null, data);
 };
 
 /**
@@ -66,11 +66,12 @@ Shotgun.prototype.reset = function(data, cb) {
  * and update last sync time.
  */
 
-function resetTime(that, time, cb) {
-  if (!cb) cb = time; time = Date.now();
+function reset(that, time, cb) {
   return function(err1, data) {
     storage.put(timeAttr(that), time, function(err2) {
-      cb(err1 || err2, data);
+      storage.put(that.id, data, function(err3) {
+        cb(err1 || err2 || err3, data);
+      });
     });
   };
 }
@@ -87,7 +88,7 @@ function handleRequest(that, cb) {
         data[key] = merge(data[key], oldData[key]);
       });
 
-      resetTime(that, time, cb)(err1 || err2, data);
+      reset(that, time, cb)(err1 || err2, data);
     });
   };
 }
