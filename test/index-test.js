@@ -61,7 +61,7 @@ describe('Shotgun', function() {
         expect(Object.keys(data)).length(6);
         expect(data.periods).length(12);
         expect(data.vendors).length(3);
-        expect(data.financial_summary).length(5);
+        expect(Object.keys(data.color_scheme)).length(7);
         done(err);
       });
     });
@@ -73,7 +73,7 @@ describe('Shotgun', function() {
           expect(data.vendors).length(2); // one vendor removed
           expect(data.tasks).length(1); // new task added
           expect(data.financial_summary).length(5); // changed
-          expect(_.first(data.accounts).account_number).equal('20101'); // one account changed
+          expect(data.accounts[0].account_number).equal('20101'); // one account changed
           done(err1 || err2);
         });
       });

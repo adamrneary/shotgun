@@ -12,7 +12,9 @@
     "ask11/storage": "*",
     "component/bind": "*",
     "learnboost/jsonp": "*",
-    "component/object": "*"
+    "component/object": "*",
+    "component/type": "*",
+    "component/each": "*"
   },
   "development": {},
   "main": "index.js",

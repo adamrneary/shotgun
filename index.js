@@ -7,6 +7,8 @@ var Storage = require('storage');
 var bind    = require('bind');
 var jsonp   = require('jsonp');
 var object  = require('object');
+var type    = require('type');
+var each    = require('each');
 var storage = new Storage('shotgun');
 
 /**
@@ -74,32 +76,54 @@ function resetTime(that, time, cb) {
 }
 
 /**
- * Parse requested data
+ * Parse requested data.
  */
 
 function handleRequest(that, cb) {
   var time = Date.now();
   return function(err1, data) {
     storage.get(that.id, function(err2, oldData) {
-      var keys = object.keys(data);
-      var length = keys.length, key;
-
-      for (var i = 0; i < length; i++) {
-        key = keys[i];
+      each(object.keys(data), function(key) {
         data[key] = merge(data[key], oldData[key]);
-      }
+      });
 
       resetTime(that, time, cb)(err1 || err2, data);
     });
   };
 }
 
+/**
+ * Merge arrays and replace other types with new value.
+ */
+
 function merge(data, oldData) {
-  return oldData;
+  if (type(oldData) !== 'array')
+    return !data || object.isEmpty(data) ? oldData : data;
+
+  var ids    = getIds(oldData);
+  var newIds = getIds(data);
+
+  each(newIds, function(id, val) {
+    val.deleted_at ? delete ids[id] : ids[id] = val;
+  });
+
+  return object.values(ids);
 }
 
 /**
- * Helper which returns time attribute
+ * Parse array to special id|val object.
+ */
+
+function getIds(array) {
+  var ret = {};
+  each(array, function(val) {
+    ret[val.id] = val;
+  });
+  return ret;
+}
+
+/**
+ * Helper which returns time attribute.
  */
 
 function timeAttr(that) {

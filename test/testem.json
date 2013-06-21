@@ -6,7 +6,7 @@
   "src_files": [
     "index.js",
     "test/support/*",
-    "test/*"
+    "test/*.js"
   ],
   "serve_files": [
     "node_modules/chai/chai.js",

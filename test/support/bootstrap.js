@@ -76,7 +76,15 @@
       primary_dark: '#00455B',
       id: '51bd6b50aa92303dcc000002'
     },
-    changed: {}
+    changed: {
+      updated_at: '2013-04-24T11:22:04Z',
+      black: '#333333',
+      dark_grey: '#333333',
+      grey: '#333333',
+      light_grey: '#333333',
+      primary_dark: '#333333',
+      id: '51bd6b50aa92303dcc000002'
+    }
   });
 
   bootstrap.all = function(time) {
