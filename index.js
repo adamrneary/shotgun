@@ -6,6 +6,7 @@
 var Storage = require('storage');
 var bind    = require('bind');
 var jsonp   = require('jsonp');
+var object  = require('object');
 var storage = new Storage('shotgun');
 
 /**
@@ -72,14 +73,29 @@ function resetTime(that, time, cb) {
   };
 }
 
+/**
+ * Parse requested data
+ */
+
 function handleRequest(that, cb) {
   var time = Date.now();
-  return function(err1, newData) {
+  return function(err1, data) {
     storage.get(that.id, function(err2, oldData) {
-      var data = oldData;
+      var keys = object.keys(data);
+      var length = keys.length, key;
+
+      for (var i = 0; i < length; i++) {
+        key = keys[i];
+        data[key] = merge(data[key], oldData[key]);
+      }
+
       resetTime(that, time, cb)(err1 || err2, data);
     });
   };
+}
+
+function merge(data, oldData) {
+  return oldData;
 }
 
 /**

@@ -11,7 +11,8 @@
   "dependencies": {
     "ask11/storage": "*",
     "component/bind": "*",
-    "learnboost/jsonp": "*"
+    "learnboost/jsonp": "*",
+    "component/object": "*"
   },
   "development": {},
   "main": "index.js",
