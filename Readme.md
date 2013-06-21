@@ -18,9 +18,7 @@ var Shotgun = require('shotgun')
 var shotgun = new Shotgun({
   id: app.company.id,
   url: '/bootstrap.json',
-  getId: activecell,
-  controlField: 'periods',
-  enable: true
+  controlField: 'periods'
 });
 
 shotgun.sync(function(err, data) {
@@ -41,7 +39,7 @@ Shotgun.clear();
   * `id` - storage id. For example when user switches between different companies and different sets of data
   * `url` - sync url. Url should be able to return all necessary data and handle `?t=time` params to return updated or removed data.
   * `controlField` - Select one collection, which serves always. It's necessary to control db reseeds.
-  * `enable`[optional] - disable shotgun and use it as a simple proxy for $.getJSON. Useful on early stages of development.
+  * `disable`[optional] - disable shotgun and use it as a simple proxy for `$.getJSON`. Useful on early stages of development.
 
 ### Shotgun.clear([cb])
 
