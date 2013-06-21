@@ -21,6 +21,7 @@ module.exports = Shotgun;
  */
 
 function Shotgun(options) {
+  this.id  = options.id;
   this.url = options.url.match(/^http/) ? options.url : location.origin + options.url;
 }
 
@@ -37,5 +38,30 @@ Shotgun.clear = bind(storage, 'clear');
  */
 
 Shotgun.prototype.sync = function(cb) {
-  jsonp(this.url, cb);
+  jsonp(this.url, resetTime(this, cb));
 };
+
+/**
+ * Reset currect storage with `data`.
+ *
+ * @param {Object} data
+ * @param {Function} cb
+ */
+
+Shotgun.prototype.reset = function(data, cb) {
+  storage.put(this.id, data, resetTime(this, cb));
+};
+
+/**
+ * Helper to handle async request
+ * and update last sync time.
+ */
+
+function resetTime(that, cb) {
+  var time = Date.now();
+  return function(err1, data) {
+    storage.put(that.id + '-time', time, function(err2) {
+      cb(err1 || err2, data);
+    });
+  };
+}
