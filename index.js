@@ -108,7 +108,7 @@ function handleRequest(that, cb) {
 
 function merge(data, oldData) {
   if (type(oldData) !== 'array')
-    return !data || object.isEmpty(data) ? oldData : data;
+    return type(oldData) === 'object' ? (object.isEmpty(data) ? oldData : data) : data;
 
   var ids    = getIds(oldData);
   var newIds = getIds(data);
