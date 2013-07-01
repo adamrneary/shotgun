@@ -12,18 +12,15 @@
 
 ## Example
 
-```js
-var Shotgun = require('shotgun')
-
-var shotgun = new Shotgun({
+```coffee
+shotgun = new Shotgun({
   id: app.company.id,
   url: '/bootstrap.json',
   field: 'periods'
 });
 
-shotgun.sync(function(err, data) {
-  // do something with data
-});
+shotgun.sync (err, data) ->
+  # do something with data
 ```
 
 ## API
@@ -50,10 +47,10 @@ shotgun.sync(function(err, data) {
 
 ### #reset(data, cb)
 
-  Reset storage for current set of data.
+  Reset storage with passed set of data.
   Example to clear storage:
 
-```js
+```coffee
 shotgun.reset({}, function() {})
 ```
 
