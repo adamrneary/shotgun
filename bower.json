@@ -1,0 +1,22 @@
+{
+  "name": "porchetta",
+  "version": "0.2.0",
+  "description": "A bad-ass bulletproof synced storage.",
+  "private": true,
+  "main": "client/index.js",
+  "dependencies": {
+    "jquery": "~1.10.1",
+    "backbone": "~1.0.0",
+    "underscore": "~1.4.4",
+    "storage": "~0.2.3"
+  },
+  "devDependencies": {
+    "chai": "~1.6.1"
+  },
+  "ignore": [
+    "**/.*",
+    "test",
+    "package.json",
+    "badass.conf"
+  ]
+}
