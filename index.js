@@ -41,7 +41,7 @@ Shotgun.clear = _.bind(storage.clear, storage);
 Shotgun.prototype.sync = function(cb) {
   var that = this;
   if (this.disable) {
-    $.getJSON(that.url, _.bind(cb, null, null));
+    reload(this, cb);
   } else {
     storage.get(timeAttr(this), function(err, time) {
       if (time)
@@ -152,7 +152,7 @@ function sameStore(data, oldData) {
 
 function reload(that, cb) {
   storage.del(timeAttr(that), function(err) {
-    err ? cb(err) : that.sync(cb);
+    $.getJSON(that.url, _.bind(cb, null, err));
   });
 }
 
