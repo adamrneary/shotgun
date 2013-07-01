@@ -9,8 +9,11 @@
     "test/*.js"
   ],
   "serve_files": [
-    "node_modules/chai/chai.js",
-    "build/build.js",
+    "components/jquery/jquery.js",
+    "components/underscore/underscore.js",
+    "components/storage/dist/storage.js",
+    "components/chai/chai.js",
+    "index.js",
     "test/support/bootstrap.js",
     "test/index-test.js"
   ]

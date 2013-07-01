@@ -1,24 +1,19 @@
-var globals = [];
-for (var i = 0; i < 40; i++) globals.push('__jp' + i);
-mocha.setup({ globals: globals});
+mocha.setup({ globals: ['jQuery*'] });
 
 describe('Shotgun', function() {
-  var Shotgun = require('shotgun');
-  var Storage = require('storage');
-  var jsonp   = require('jsonp');
   var storage = new Storage('shotgun');
   var expect  = chai.expect;
   var shotgun;
 
   beforeEach(function(done) {
-    jsonp('http://localhost:7358/reset.json', function(err1) {
-      Shotgun.clear(function(err2) {
+    $.getJSON('http://localhost:7358/reset.json?callback=?', function(res) {
+      Shotgun.clear(function(err) {
         shotgun = new Shotgun({
           id: '51bd6acd3af29d123999afc1',
           url: 'http://localhost:7358/bootstrap.json',
           field: 'periods'
         });
-        done(err1 || err2);
+        done(err);
       });
     });
   });
@@ -86,21 +81,21 @@ describe('Shotgun', function() {
     });
 
     it('bootstrap returns updated and deleted records', function(done) {
-      jsonp('http://localhost:7358/change-data.json', function(err1) {
-        shotgun.sync(function(err2, data) {
+      $.getJSON('http://localhost:7358/change-data.json?callback=?', function(res) {
+        shotgun.sync(function(err, data) {
           expect(Object.keys(data)).length(6);
           expect(data.vendors).length(2); // one vendor removed
           expect(data.tasks).length(1); // new task added
           expect(data.financial_summary).length(5); // changed
           expect(data.accounts[0].account_number).equal('20101'); // one account changed
-          done(err1 || err2);
+          done(err);
         });
       });
     });
 
     it('handle reseed event', function(done) {
-      jsonp('http://localhost:7358/reseed.json', function(err1) {
-        shotgun.sync(function(err2, data) {
+      $.getJSON('http://localhost:7358/reseed.json?callback=?', function(res) {
+        shotgun.sync(function(err, data) {
           var oldData = bootstrap.all();
           expect(joinIds(oldData.periods)).not.equal(joinIds(data.periods));
           expect(joinIds(oldData.vendors)).not.equal(joinIds(data.vendors));
@@ -108,7 +103,7 @@ describe('Shotgun', function() {
           expect(joinIds(oldData.financial_summary)).not.equal(joinIds(data.financial_summary));
           expect(oldData.color_scheme).not.equal(data.color_scheme);
           expect(data.tasks).length(0);
-          done(err1 || err2);
+          done(err);
         });
       });
     });

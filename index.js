@@ -20,9 +20,9 @@ window.Shotgun = Shotgun;
  */
 
 function Shotgun(options) {
-  this.id      = options.id;
-  this.url     = options.url.match(/^http/) ? options.url : location.origin + options.url;
-  this.field   = options.field;
+  this.id  = options.id;
+  this.url = options.url.match(/^http/) ? options.url + '?callback=?' : location.origin + options.url;
+  this.field = options.field;
   this.disable = !! options.disable;
 }
 
@@ -30,7 +30,7 @@ function Shotgun(options) {
  * Clear shotgun's cache.
  */
 
-Shotgun.clear = bind(storage, 'clear');
+Shotgun.clear = _.bind(storage.clear, storage);
 
 /**
  * Sync local storage with server.
@@ -69,10 +69,10 @@ Shotgun.prototype.reset = function(data, cb) {
  */
 
 function reset(that, time, cb) {
-  return function(err, data) {
-    storage.put(timeAttr(that), time, function(err2) {
-      storage.put(that.id, data, function(err3) {
-        cb(err || err2 || err3, data);
+  return function(data) {
+    storage.put(timeAttr(that), time, function(err) {
+      storage.put(that.id, data, function(err2) {
+        cb(err || err2, data);
       });
     });
   };
