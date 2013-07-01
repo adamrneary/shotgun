@@ -4,11 +4,7 @@
 
 ## Installation
 
-  With [component.js](https://github.com/component/component)
-
-    $ component install activecell/shotgun
-
-  or copy [dist/shotgun.js](https://github.com/activecell/shotgun/blob/master/dist/shotgun.js) to your vendor folder.
+  Copy [shotgun.js](https://github.com/activecell/shotgun/blob/master/index.js) and [storage.js](https://github.com/ask11/storage/blob/master/dist/storage.js) to vendor folder.
 
 ## Example
 
