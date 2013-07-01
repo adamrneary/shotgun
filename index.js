@@ -41,11 +41,11 @@ Shotgun.clear = _.bind(storage.clear, storage);
 Shotgun.prototype.sync = function(cb) {
   var that = this;
   if (this.disable) {
-    $.getJSON(that.url, cb);
+    $.getJSON(that.url, _.bind(cb, null, null));
   } else {
     storage.get(timeAttr(this), function(err, time) {
       if (time)
-        $.getJSON(that.url + '?t=' + time, handleRequest(that, cb));
+        $.getJSON(that.url + '&t=' + time, handleRequest(that, cb));
       else
         $.getJSON(that.url, reset(that, Date.now(), cb));
     });
@@ -60,7 +60,7 @@ Shotgun.prototype.sync = function(cb) {
  */
 
 Shotgun.prototype.reset = function(data, cb) {
-  reset(this, Date.now(), cb)(null, data);
+  reset(this, Date.now(), cb)(data);
 };
 
 /**
@@ -84,16 +84,16 @@ function reset(that, time, cb) {
 
 function handleRequest(that, cb) {
   var time = Date.now();
-  return function(err, data) {
-    storage.get(that.id, function(err2, oldData) {
+  return function(data) {
+    storage.get(that.id, function(err, oldData) {
       if (!sameStore(data[that.field], oldData[that.field]))
         return reload(that, cb);
 
-      _.forEach(_.keys(data), function(key) {
-        data[key] = merge(data[key], oldData[key]);
+      _.forEach(data, function(val, key) {
+        data[key] = merge(val, oldData[key]);
       });
 
-      reset(that, time, cb)(err || err2, data);
+      reset(that, time, cb)(data);
     });
   };
 }
@@ -103,13 +103,13 @@ function handleRequest(that, cb) {
  */
 
 function merge(data, oldData) {
-  if (_.isArray(oldData))
+  if (!_.isArray(oldData))
     return _.isObject(oldData) ? (_.isEmpty(data) ? oldData : data) : data;
 
   var ids    = getIds(oldData);
   var newIds = getIds(data);
 
-  each(newIds, function(id, val) {
+  _.forEach(newIds, function(val, id) {
     val.deleted_at ? delete ids[id] : ids[id] = val;
   });
 
@@ -122,7 +122,7 @@ function merge(data, oldData) {
 
 function getIds(array) {
   var ret = {};
-  each(array, function(val) {
+  _.forEach(array, function(val) {
     ret[val.id] = val;
   });
   return ret;
