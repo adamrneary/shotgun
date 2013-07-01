@@ -1,21 +1,17 @@
+;(function(_) {
+'use strict';
 
 /**
  * Local variables.
  */
 
-var Storage = require('storage');
-var bind    = require('bind');
-var jsonp   = require('jsonp');
-var object  = require('object');
-var type    = require('type');
-var each    = require('each');
 var storage = new Storage('shotgun');
 
 /**
  * Expose constructor.
  */
 
-module.exports = Shotgun;
+window.Shotgun = Shotgun;
 
 /**
  * Create `Shotgun` instance.
@@ -45,13 +41,13 @@ Shotgun.clear = bind(storage, 'clear');
 Shotgun.prototype.sync = function(cb) {
   var that = this;
   if (this.disable) {
-    jsonp(that.url, cb);
+    $.getJSON(that.url, cb);
   } else {
     storage.get(timeAttr(this), function(err, time) {
       if (time)
-        jsonp(that.url + '?t=' + time, handleRequest(that, cb));
+        $.getJSON(that.url + '?t=' + time, handleRequest(that, cb));
       else
-        jsonp(that.url, reset(that, Date.now(), cb));
+        $.getJSON(that.url, reset(that, Date.now(), cb));
     });
   }
 };
@@ -93,7 +89,7 @@ function handleRequest(that, cb) {
       if (!sameStore(data[that.field], oldData[that.field]))
         return reload(that, cb);
 
-      each(object.keys(data), function(key) {
+      _.forEach(_.keys(data), function(key) {
         data[key] = merge(data[key], oldData[key]);
       });
 
@@ -107,8 +103,8 @@ function handleRequest(that, cb) {
  */
 
 function merge(data, oldData) {
-  if (type(oldData) !== 'array')
-    return type(oldData) === 'object' ? (object.isEmpty(data) ? oldData : data) : data;
+  if (_.isArray(oldData))
+    return _.isObject(oldData) ? (_.isEmpty(data) ? oldData : data) : data;
 
   var ids    = getIds(oldData);
   var newIds = getIds(data);
@@ -117,7 +113,7 @@ function merge(data, oldData) {
     val.deleted_at ? delete ids[id] : ids[id] = val;
   });
 
-  return object.values(ids);
+  return _.values(ids);
 }
 
 /**
@@ -145,8 +141,8 @@ function timeAttr(that) {
  */
 
 function sameStore(data, oldData) {
-  var newIds = object.keys(getIds(data)).join('');
-  var ids    = object.keys(getIds(oldData)).join('');
+  var newIds = _.keys(getIds(data)).join('');
+  var ids    = _.keys(getIds(oldData)).join('');
   return newIds === ids;
 }
 
@@ -159,3 +155,5 @@ function reload(that, cb) {
     err ? cb(err) : that.sync(cb);
   });
 }
+
+}).call(this, _);
