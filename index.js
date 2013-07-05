@@ -70,9 +70,11 @@ Shotgun.prototype.reset = function(data, cb) {
 
 function reset(that, time, cb) {
   return function(data) {
-    storage.put(timeAttr(that), time, function(err) {
-      storage.put(that.id, data, function(err2) {
-        cb(err || err2, data);
+    storage.put(that.id, data, function(err) {
+      if (err) return cb(err, data);
+
+      storage.put(timeAttr(that), time, function(err) {
+        cb(err, data);
       });
     });
   };
@@ -86,6 +88,7 @@ function handleRequest(that, cb) {
   var time = Date.now();
   return function(data) {
     storage.get(that.id, function(err, oldData) {
+      if (!oldData) oldData = {};
       if (!sameStore(data[that.field], oldData[that.field]))
         return reload(that, cb);
 
