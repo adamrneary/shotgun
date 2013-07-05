@@ -20,9 +20,10 @@ window.Shotgun = Shotgun;
  */
 
 function Shotgun(options) {
-  this.id  = options.id;
-  this.url = options.url.match(/^http/) ? options.url + '?callback=?' : location.origin + options.url;
-  this.field = options.field;
+  this.id      = options.id;
+  this.isJsonp = options.url.match(/^http/);
+  this.url     = this.isJsonp ? options.url + '?callback=?' : location.origin + options.url;
+  this.field   = options.field;
   this.disable = !! options.disable;
 }
 
@@ -44,8 +45,9 @@ Shotgun.prototype.sync = function(cb) {
     reload(this, cb);
   } else {
     storage.get(timeAttr(this), function(err, time) {
+      var prefix = that.isJsonp ? '&' : '?';
       if (time)
-        $.getJSON(that.url + '&t=' + time, handleRequest(that, cb));
+        $.getJSON(that.url + prefix + 't=' + time, handleRequest(that, cb));
       else
         $.getJSON(that.url, reset(that, Date.now(), cb));
     });
