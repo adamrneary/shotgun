@@ -1,3 +1,9 @@
+## 0.2.1 / 2013-07-05
+
+  * update Readme
+  * fix set of lastSync date for old browsers
+  * fix jsonp detection
+
 ## 0.2.0 / 2013-07-01
 
   * fix bug with not object bootstraps

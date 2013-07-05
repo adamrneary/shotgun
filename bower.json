@@ -1,9 +1,9 @@
 {
-  "name": "porchetta",
-  "version": "0.2.0",
-  "description": "A bad-ass bulletproof synced storage.",
+  "name": "shotgun",
+  "version": "0.2.1",
+  "description": "Bad-ass, bulletproof synced storage.",
   "private": true,
-  "main": "client/index.js",
+  "main": "index.js",
   "dependencies": {
     "jquery": "~1.10.1",
     "underscore": "~1.4.4",
