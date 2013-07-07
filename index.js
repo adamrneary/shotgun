@@ -24,6 +24,7 @@ function Shotgun(options) {
   this.isJsonp = options.url.match(/^http/);
   this.url     = this.isJsonp ? options.url + '?callback=?' : location.origin + options.url;
   this.field   = options.field;
+  this.ignore  = options.allOrNothing || [];
   this.disable = !! options.disable;
 }
 
@@ -95,7 +96,10 @@ function handleRequest(that, cb) {
         return reload(that, cb);
 
       _.forEach(data, function(val, key) {
-        data[key] = merge(val, oldData[key]);
+        if (_.include(that.ignore, key))
+          data[key] = _.isEmpty(val) ? oldData[key] : val;
+        else
+          data[key] = merge(val, oldData[key]);
       });
 
       reset(that, time, cb)(data);

@@ -96,14 +96,14 @@ describe('Shotgun', function() {
     });
 
     it('handle reseed event', function(done) {
+      var oldData = bootstrap.all();
       $.getJSON('http://localhost:7358/reseed.json?callback=?', function(res) {
         shotgun.sync(function(err, data) {
-          var oldData = bootstrap.all();
           expect(joinIds(oldData.periods)).not.equal(joinIds(data.periods));
           expect(joinIds(oldData.vendors)).not.equal(joinIds(data.vendors));
           expect(joinIds(oldData.accounts)).not.equal(joinIds(data.accounts));
-          expect(joinIds(oldData.financial_summary)).not.equal(joinIds(data.financial_summary)); // ?
           expect(oldData.color_scheme).not.equal(data.color_scheme);
+          expect(periodIds(oldData.financial_summary)).not.equal(periodIds(data.financial_summary));
           expect(data.tasks).length(0);
           done(err);
         });
@@ -167,7 +167,7 @@ describe('Shotgun', function() {
       expect(data.vendors).length(3);
       expect(data.accounts).length(2);
       expect(data.tasks).length(0);
-      expect(data.financial_summary).length(5);
+      expect(data.financial_summary).length(4);
       expect(Object.keys(data.color_scheme)).length(7);
     });
 
@@ -185,5 +185,9 @@ describe('Shotgun', function() {
 
   function joinIds(items) {
     return items.map(function(item) { return item.id; }).join('');
+  }
+
+  function periodIds(items) {
+    return items.map(function(item) { return item.period_id; }).join('');
   }
 });

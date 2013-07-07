@@ -13,7 +13,7 @@ shotgun = new Shotgun
   id: app.company.id
   url: '/bootstrap.json'
   field: 'periods'
-  allOrNothing: ['financial_summaries']
+  allOrNothing: ['financial_summary']
 
 shotgun.sync (err, data) ->
   # do something with data
