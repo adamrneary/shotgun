@@ -9,11 +9,11 @@
 ## Example
 
 ```coffee
-shotgun = new Shotgun({
-  id: app.company.id,
-  url: '/bootstrap.json',
+shotgun = new Shotgun
+  id: app.company.id
+  url: '/bootstrap.json'
   field: 'periods'
-});
+  allOrNothing: ['financial_summaries']
 
 shotgun.sync (err, data) ->
   # do something with data
@@ -28,7 +28,8 @@ shotgun.sync (err, data) ->
   * `id` - storage id. For example when user switches between different companies and different sets of data
   * `url` - sync url. Url should be able to return all necessary data and handle `?t=time` params to return updated or removed data.
   * `field` - Select one collection, which serves always. It's necessary to control db reseeds.
-  * `disable`[optional] - disable shotgun and use it as a simple proxy for `$.getJSON`. Useful on early stages of development.
+  * `disable`*[optional]* - disable shotgun and use it as a simple proxy for `$.getJSON`. Useful on early stages of development.
+  * `allOrNothing`*[optional]* - shotgun does not merge this field, if it's empty, it gets it from the cache else completely rewrite it. Useful for aggregated data, that updates rarely.
 
 ### Shotgun.clear([cb])
 

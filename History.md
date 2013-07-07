@@ -1,4 +1,8 @@
-## 0.2.1 / 2013-07-05
+### 0.2.2 / 2013-07-07
+
+  * add `allOrNothing` option
+
+### 0.2.1 / 2013-07-05
 
   * update Readme
   * fix set of lastSync date for old browsers
