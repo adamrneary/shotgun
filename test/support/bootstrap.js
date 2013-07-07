@@ -1,11 +1,3 @@
-/**
- + all - time
- + nothing
- + changed
- reseed
- by id
-*/
-
 (function(exports) {
   var bootstrap = exports.bootstrap = {};
   bootstrap.hasChange = false;
@@ -60,14 +52,14 @@
   var financialSummary = getData(function(){ return {
     nothing: [],
     all: [
-      { updated_at: '2013-03-29T18:21:44Z', period_id: id('004'), account_id: id('017'), amount_cents: -355.0, id: id('019') },
-      { updated_at: '2013-03-29T18:21:44Z', period_id: id('004'), account_id: id('017'), amount_cents: 400.0, id: id('020') },
-      { updated_at: '2013-03-29T18:21:44Z', period_id: id('004'), account_id: id('018'), amount_cents: 455.0, id: id('021') },
-      { updated_at: '2013-03-29T18:21:44Z', period_id: id('005'), account_id: id('017'), vendor_id: '5155dbba2bc51f31710000f9', amount_cents: 77685.0, id: id('022') },
-      { updated_at: '2013-03-29T18:21:44Z', period_id: id('006'), account_id: id('017'), vendor_id: '5155dbc72bc51f3171000168', amount_cents: 1181.0, id: id('023') }
+      { period_id: id('004'), account_id: id('017'), amount_cents: 45.0 },
+      { period_id: id('004'), account_id: id('018'), amount_cents: 455.0 },
+      { period_id: id('005'), account_id: id('017'), vendor_id: id('014'), amount_cents: 77685.0 },
+      { period_id: id('006'), account_id: id('017'), vendor_id: id('016'), amount_cents: 1181.0 }
     ],
     changed: [
-      { updated_at: '2013-06-12T10:56:00Z', period_id: id('004'), account_id: id('017'), vendor_id: '5155dbba2bc51f31710000f9', amount_cents: 1181.0, id: id('023') }
+      { period_id: id('004'), account_id: id('018'), amount_cents: 500.0 },
+      { period_id: id('005'), account_id: id('017'), vendor_id: id('014'), amount_cents: 88420.0 }
     ]
   };});
 

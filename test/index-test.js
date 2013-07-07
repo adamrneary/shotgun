@@ -11,7 +11,8 @@ describe('Shotgun', function() {
         shotgun = new Shotgun({
           id: '51bd6acd3af29d123999afc1',
           url: 'http://localhost:7358/bootstrap.json',
-          field: 'periods'
+          field: 'periods',
+          allOrNothing: ['financial_summary']
         });
         done(err);
       });
@@ -39,8 +40,8 @@ describe('Shotgun', function() {
       expect(data.tasks).length(0);
     });
 
-    it('returns arrays with custom ids', function() {
-      expect(data.financial_summary).length(5);
+    it('returns arrays for "all or nothing" fields', function() {
+      expect(data.financial_summary).length(4);
     });
 
     it('returns objects', function() {
@@ -75,6 +76,7 @@ describe('Shotgun', function() {
         expect(Object.keys(data)).length(6);
         expect(data.periods).length(12);
         expect(data.vendors).length(3);
+        expect(data.financial_summary).length(4);
         expect(Object.keys(data.color_scheme)).length(7);
         done(err);
       });
@@ -86,7 +88,7 @@ describe('Shotgun', function() {
           expect(Object.keys(data)).length(6);
           expect(data.vendors).length(2); // one vendor removed
           expect(data.tasks).length(1); // new task added
-          expect(data.financial_summary).length(5); // changed
+          expect(data.financial_summary).length(2); // rebuilded from scratch
           expect(data.accounts[0].account_number).equal('20101'); // one account changed
           done(err);
         });
@@ -100,7 +102,7 @@ describe('Shotgun', function() {
           expect(joinIds(oldData.periods)).not.equal(joinIds(data.periods));
           expect(joinIds(oldData.vendors)).not.equal(joinIds(data.vendors));
           expect(joinIds(oldData.accounts)).not.equal(joinIds(data.accounts));
-          expect(joinIds(oldData.financial_summary)).not.equal(joinIds(data.financial_summary));
+          expect(joinIds(oldData.financial_summary)).not.equal(joinIds(data.financial_summary)); // ?
           expect(oldData.color_scheme).not.equal(data.color_scheme);
           expect(data.tasks).length(0);
           done(err);
@@ -143,7 +145,7 @@ describe('Shotgun', function() {
     it('has different sets of data', function() {
       expect(Object.keys(data)).length(6);
       expect(data.vendors).length(3);
-      expect(data.financial_summary).length(5);
+      expect(data.financial_summary).length(4);
       expect(Object.keys(data2)).length(0);
     });
   });
