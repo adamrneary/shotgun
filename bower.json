@@ -1,6 +1,6 @@
 {
   "name": "shotgun",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Bad-ass, bulletproof synced storage.",
   "private": true,
   "main": "index.js",

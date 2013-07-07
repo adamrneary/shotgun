@@ -39,7 +39,7 @@ shotgun.sync (err, data) ->
 
   Sync local storage with server. Callback gets 2 paramethers:
 
-  * `err` - handle error if something bad happened
+  * `err` - handle error, if something bad happened
   * `data` - synced data
 
 ### #reset(data, cb)
@@ -48,7 +48,7 @@ shotgun.sync (err, data) ->
   Example to clear storage:
 
 ```coffee
-shotgun.reset({}, function() {})
+shotgun.reset {}, (err) ->
 ```
 
 ## Development

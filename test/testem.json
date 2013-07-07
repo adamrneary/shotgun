@@ -4,15 +4,10 @@
   "launch_in_dev": ["phantomjs"],
   "launch_in_ci": ["phantomjs"],
   "src_files": [
-    "index.js",
-    "test/support/*",
-    "test/*.js"
-  ],
-  "serve_files": [
-    "components/jquery/jquery.js",
-    "components/underscore/underscore.js",
-    "components/storage/dist/storage.js",
-    "components/chai/chai.js",
+    "bower_components/jquery/jquery.js",
+    "bower_components/underscore/underscore.js",
+    "bower_components/storage/dist/storage.js",
+    "bower_components/chai/chai.js",
     "index.js",
     "test/support/bootstrap.js",
     "test/index-test.js"

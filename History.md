@@ -1,5 +1,6 @@
 ### 0.2.2 / 2013-07-07
 
+  * use bower 0.10.0
   * add `allOrNothing` option
 
 ### 0.2.1 / 2013-07-05

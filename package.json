@@ -1,12 +1,12 @@
 {
   "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install",
+    "postinstall": "./node_modules/bower/bin/bower install --quiet",
     "test": "./test/server/start && ./node_modules/testem/testem.js -f test/testem.json ci && ./test/server/stop",
     "start": "./test/server/start && ./node_modules/testem/testem.js -f test/testem.json && ./test/server/stop",
     "stat": "cloc index.js --quiet && cloc test/*.js --quiet"
   },
   "devDependencies": {
-    "bower": "~0.9.2",
+    "bower": "~0.10.0",
     "testem": "~0.2.98",
     "express": "~3.2.6"
   }
