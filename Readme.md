@@ -4,6 +4,8 @@
 
 ## Installation
 
+    $ bower install git@github.com:activecell/shotgun.git#0.x.x --save
+
   Copy [shotgun.js](https://github.com/activecell/shotgun/blob/master/index.js) and [storage.js](https://github.com/ask11/storage/blob/master/dist/storage.js) to vendor folder.
 
 ## Example
