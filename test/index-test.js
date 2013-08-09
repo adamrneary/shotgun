@@ -1,12 +1,13 @@
+/* jshint undef: false */
 mocha.setup({ globals: ['jQuery*'] });
 
 describe('Shotgun', function() {
-  var storage = new Storage('shotgun');
+  var storage = new Indexed('shotgun:main');
   var expect  = chai.expect;
   var shotgun;
 
   beforeEach(function(done) {
-    $.getJSON('http://localhost:7358/reset.json?callback=?', function(res) {
+    $.getJSON('http://localhost:7358/reset.json?callback=?', function() {
       Shotgun.clear(function(err) {
         shotgun = new Shotgun({
           id: '51bd6acd3af29d123999afc1',
@@ -50,8 +51,8 @@ describe('Shotgun', function() {
 
     it('stores data to storage', function(done) {
       storage.all(function(err, values) {
-        var keys = Object.keys(values);
-        expect(keys).length(2);
+        var keys = values.map(function(value) { return value.id; });
+        expect(Object.keys(values)).length(2);
         expect(keys).include('51bd6acd3af29d123999afc1');
         expect(keys).include('51bd6acd3af29d123999afc1-time');
         done(err);
@@ -60,7 +61,7 @@ describe('Shotgun', function() {
 
     it('saves time', function(done) {
       storage.get('51bd6acd3af29d123999afc1-time', function(err, time) {
-        expect(time).closeTo(Date.now(), 500);
+        expect(time.value).closeTo(Date.now(), 500); // FIXME: Indexed#0.6.0
         done(err);
       });
     });
@@ -83,7 +84,7 @@ describe('Shotgun', function() {
     });
 
     it('bootstrap returns updated and deleted records', function(done) {
-      $.getJSON('http://localhost:7358/change-data.json?callback=?', function(res) {
+      $.getJSON('http://localhost:7358/change-data.json?callback=?', function() {
         shotgun.sync(function(err, data) {
           expect(Object.keys(data)).length(6);
           expect(data.vendors).length(2); // one vendor removed
@@ -97,7 +98,7 @@ describe('Shotgun', function() {
 
     it('handle reseed event', function(done) {
       var oldData = bootstrap.all();
-      $.getJSON('http://localhost:7358/reseed.json?callback=?', function(res) {
+      $.getJSON('http://localhost:7358/reseed.json?callback=?', function() {
         shotgun.sync(function(err, data) {
           expect(joinIds(oldData.periods)).not.equal(joinIds(data.periods));
           expect(joinIds(oldData.vendors)).not.equal(joinIds(data.vendors));
@@ -132,8 +133,8 @@ describe('Shotgun', function() {
 
     it('stores data separately', function(done) {
       storage.all(function(err, values) {
-        var keys = Object.keys(values);
-        expect(keys).length(4);
+        expect(Object.keys(values)).length(4);
+        var keys = values.map(function(value) { return value.id; });
         expect(keys).include('81bd6caa3af29d123999afc2');
         expect(keys).include('81bd6caa3af29d123999afc2-time');
         expect(keys).include('51bd6acd3af29d123999afc1');

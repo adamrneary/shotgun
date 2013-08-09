@@ -1,11 +1,11 @@
-;(function(_) {
+;(function($, _, Indexed) {
 'use strict';
 
 /**
  * Local variables.
  */
 
-var storage = new Storage('shotgun');
+var storage = new Indexed('shotgun:main');
 
 /**
  * Expose constructor.
@@ -76,7 +76,9 @@ function reset(that, time, cb) {
     storage.put(that.id, data, function(err) {
       if (err) return cb(err, data);
 
-      storage.put(timeAttr(that), time, function(err) {
+      // FIXME: Indexed#0.6.0, use only time
+      storage.put(timeAttr(that), { value: time }, function(err) {
+        delete data.id; // FIXME: Indexed#0.6.0, it does not use ugly keyPath field
         cb(err, data);
       });
     });
@@ -165,4 +167,4 @@ function reload(that, cb) {
   });
 }
 
-}).call(this, _);
+}).call(this, jQuery, _, Indexed);
