@@ -1,5 +1,3 @@
-/* jshint undef: false */
-
 /**
  * This is a casperjs test suite. It basically works so:
  *
@@ -16,9 +14,10 @@
  *
  * - install latest casperjs: `brew install casperjs --devel`
  * - start activecell server locally in different tab: `cd ../activecell && rails s`
- * - run casperjs test ./test/integration/bootstrap-scenario.js
+ * - run ./script/run-casperjs
  */
 
+/* jshint undef: false */
 // help store and compare performance characteristics.
 var perf = {};
 
@@ -36,18 +35,22 @@ casper.test.begin('Don logs in to http://sterlingcooper.activecell.local:3000/ a
     casper.click('#login_button');
 
     casper.waitForUrl('http://sterlingcooper.activecell.local:3000/', null, captureError);
-    casper.echo('The app loading...', 'INFO_BAR');
+    casper.echo('The app loading...', 'INFO');
     casper.waitWhileSelector('#loader', null, captureError, 20000);
   });
 
   casper.then(function() {
-    capture();
     perf = casper.evaluate(function() { return app.performance; });
     casper.echo('Page loaded during: ' + perf.total + ' (data refresh: ' +
-      perf.data + ', strikers: ' + perf.strikers + ');', 'INFO_BAR');
+      perf.data + ', strikers: ' + perf.strikers + ');', 'INFO');
+    casper.echo('localStorage length: ' + JSON.stringify(localStorage).length, 'INFO');
 
     test.assertVisible('#main_nav');
     test.assertExists('li.active[data-nav="dashboard"]');
+  });
+
+  casper.then(function() {
+    // make a few changes
   });
 
   casper.run(function() {

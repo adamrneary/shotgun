@@ -1,8 +1,8 @@
 {
   "scripts": {
     "postinstall": "bower install --quiet",
-    "test": "./test/server/start && testem -f test/testem.json ci && ./test/server/stop",
-    "start": "./test/server/start && testem -f test/testem.json && ./test/server/stop",
+    "test": "./script/start-fake-server && testem -f test/testem.json ci && ./script/sto-fake-server",
+    "start": "./script/start-fake-server && testem -f test/testem.json && ./script/sto-fake-server",
     "stat": "cloc index.js --quiet && cloc test/*.js --quiet"
   },
   "devDependencies": {
