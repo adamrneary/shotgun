@@ -5,17 +5,16 @@
   "private": true,
   "main": "index.js",
   "dependencies": {
-    "jquery": "~1.10.1",
-    "underscore": "~1.4.4",
-    "storage": "~0.2.3"
+    "jquery": "~1.10.x",
+    "underscore": "~1.5.x",
+    "indexed": "0.5.0"
   },
   "devDependencies": {
-    "chai": "~1.6.1"
+    "chai": "~1.7.x"
   },
   "ignore": [
     "**/.*",
     "test",
-    "package.json",
-    "badass.conf"
+    "package.json"
   ]
 }
