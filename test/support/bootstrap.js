@@ -18,6 +18,12 @@
     };
   }
 
+  var timestamp = getData(function(){ return {
+    nothing: 1376030555704,
+    all: 1376030171281,
+    changed: 1376030576160
+  };});
+
   var vendors = getData(function(){ return {
     nothing: [],
     all: [
@@ -87,6 +93,7 @@
 
   bootstrap.all = function(time) {
     return {
+      timestamp: timestamp(time),
       periods: [
         { first_day: '2013-01-01', id: id('001') },
         { first_day: '2013-02-01', id: id('002') },

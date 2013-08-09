@@ -50,7 +50,7 @@ Shotgun.prototype.sync = function(cb) {
       if (time)
         $.getJSON(that.url + prefix + 't=' + time, handleRequest(that, cb));
       else
-        $.getJSON(that.url, reset(that, Date.now(), cb));
+        $.getJSON(that.url, reset(that, cb));
     });
   }
 };
@@ -63,7 +63,7 @@ Shotgun.prototype.sync = function(cb) {
  */
 
 Shotgun.prototype.reset = function(data, cb) {
-  reset(this, Date.now(), cb)(data);
+  reset(this, cb)(data);
 };
 
 /**
@@ -71,14 +71,15 @@ Shotgun.prototype.reset = function(data, cb) {
  * and update last sync time.
  */
 
-function reset(that, time, cb) {
+function reset(that, cb) {
   return function(data) {
     storage.put(that.id, data, function(err) {
       if (err) return cb(err, data);
 
-      // FIXME: Indexed#0.6.0, use only time
-      storage.put(timeAttr(that), { value: time }, function(err) {
+      // FIXME: Indexed#0.6.0, don't use value property
+      storage.put(timeAttr(that), { value: data.timestamp }, function(err) {
         delete data.id; // FIXME: Indexed#0.6.0, it does not use ugly keyPath field
+        delete data.timestamp;
         cb(err, data);
       });
     });
@@ -90,7 +91,6 @@ function reset(that, time, cb) {
  */
 
 function handleRequest(that, cb) {
-  var time = Date.now();
   return function(data) {
     storage.get(that.id, function(err, oldData) {
       if (!oldData) oldData = {};
@@ -104,7 +104,7 @@ function handleRequest(that, cb) {
           data[key] = merge(val, oldData[key]);
       });
 
-      reset(that, time, cb)(data);
+      reset(that, cb)(data);
     });
   };
 }
@@ -163,7 +163,10 @@ function sameStore(data, oldData) {
 
 function reload(that, cb) {
   storage.del(timeAttr(that), function(err) {
-    $.getJSON(that.url, _.bind(cb, null, err));
+    $.getJSON(that.url, function(res) {
+      delete res.timestamp;
+      cb(err, res);
+    });
   });
 }
 

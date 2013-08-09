@@ -61,7 +61,7 @@ describe('Shotgun', function() {
 
     it('saves time', function(done) {
       storage.get('51bd6acd3af29d123999afc1-time', function(err, time) {
-        expect(time.value).closeTo(Date.now(), 500); // FIXME: Indexed#0.6.0
+        expect(time.value).equal(1376030171281); // FIXME: Indexed#0.6.0, don't use value
         done(err);
       });
     });
