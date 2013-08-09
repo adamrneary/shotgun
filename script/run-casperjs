@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+#
+# It does the trick:
+# In order to control db changes and don't run slow `rake db:seed` every time,
+# it backups prepopulated DB at first start and than just restore it, everytime you run this script
+#
+
+DB_NAME=activecell_development
+DIRECTORY=tmp/$DB_NAME
+if [ -d "$DIRECTORY" ]; then
+  mongorestore --db $DB_NAME tmp/$DB_NAME > /dev/null
+else
+  mongodump --db $DB_NAME --out tmp
+fi
+
+casperjs test ./test/integration/bootstrap-scenario.js
