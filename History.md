@@ -1,3 +1,14 @@
+# TODO:
+
+  * ~ migrate to indexed#0.6.0 when will ready: better storage, and no keyPath
+
+## 0.3.0 / 2013-08-09
+
+  * use indexed instead of storage
+  * get timestamp field from server (we can't trust clients)
+  * update dependencies
+  * update Readme
+
 ### 0.2.2 / 2013-07-07
 
   * use bower 0.10.0

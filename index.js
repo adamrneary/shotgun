@@ -47,10 +47,12 @@ Shotgun.prototype.sync = function(cb) {
   } else {
     storage.get(timeAttr(this), function(err, time) {
       var prefix = that.isJsonp ? '&' : '?';
-      if (time)
-        $.getJSON(that.url + prefix + 't=' + time, handleRequest(that, cb));
-      else
+      if (time) {
+        // FIXME: indexed#0.6.0 don't use value
+        $.getJSON(that.url + prefix + 't=' + time.value, handleRequest(that, cb));
+      } else {
         $.getJSON(that.url, reset(that, cb));
+      }
     });
   }
 };
