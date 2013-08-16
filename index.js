@@ -20,9 +20,10 @@ window.Shotgun = Shotgun;
  */
 
 function Shotgun(options) {
+  var origin   = window.location.protocol + '//' + window.location.host;
   this.id      = options.id;
   this.isJsonp = options.url.match(/^http/);
-  this.url     = this.isJsonp ? options.url + '?callback=?' : location.origin + options.url;
+  this.url     = this.isJsonp ? options.url + '?callback=?' : origin + options.url;
   this.field   = options.field;
   this.ignore  = options.allOrNothing || [];
   this.disable = !! options.disable;

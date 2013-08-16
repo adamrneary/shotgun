@@ -1,6 +1,5 @@
 {
   "framework": "mocha",
-  "before_tests": "npm run build",
   "launch_in_dev": ["phantomjs"],
   "launch_in_ci": ["phantomjs"],
   "src_files": [
