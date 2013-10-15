@@ -1,6 +1,6 @@
-# TODO:
+### 0.3.1 / 2013-10-15
 
-  * ~ migrate to indexed#0.6.0 when will ready: better storage, and no keyPath
+  * add `local` option to speed up development
 
 ## 0.3.0 / 2013-08-09
 

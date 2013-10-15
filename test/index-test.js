@@ -96,7 +96,7 @@ describe('Shotgun', function() {
       });
     });
 
-    it('handle reseed event', function(done) {
+    it('handles reseed event', function(done) {
       var oldData = bootstrap.all();
       $.getJSON('http://localhost:7358/reseed.json?callback=?', function() {
         shotgun.sync(function(err, data) {
@@ -108,6 +108,21 @@ describe('Shotgun', function() {
           expect(data.tasks).length(0);
           done(err);
         });
+      });
+    });
+
+    it('handles local option', function(done) {
+      shotgun.local = true;
+      $.ajaxSetup({
+        beforeSend: function() { done(new Error('local does not do request')) }
+      });
+
+      shotgun.sync(function(err, data) {
+        expect(Object.keys(data)).length(8);
+        expect(data.id).equal(shotgun.id);
+        expect(data.timestamp).exists;
+        $.ajaxSetup({ beforeSend: function() {} }); // reset settings back
+        done(err);
       });
     });
   });

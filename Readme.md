@@ -16,6 +16,7 @@ shotgun = new Shotgun
   url: '/bootstrap.json'
   field: 'periods'
   allOrNothing: ['financial_summary']
+  local: location.search.indexOf('skipSync') != -1
 
 shotgun.sync (err, data) ->
   # do something with data
@@ -47,6 +48,7 @@ shotgun.sync (err, data) ->
   * `field` - Select one collection, which serves always. It's necessary to control db reseeds.
   * `disable`*[optional]* - disable shotgun and use it as a simple proxy for `$.getJSON`. Useful on early stages of development.
   * `allOrNothing`*[optional]* - shotgun does not merge this field, if it's empty, it gets it from the cache else completely rewrite it. Useful for aggregated data, that updates rarely.
+  * `local`*[optional]* - do not request server. Useful in development, when you are not changing data.
 
 ### Shotgun.clear([cb])
 

@@ -26,6 +26,7 @@ function Shotgun(options) {
   this.url     = this.isJsonp ? options.url + '?callback=?' : origin + options.url;
   this.field   = options.field;
   this.ignore  = options.allOrNothing || [];
+  this.local   = options.local;
   this.disable = !! options.disable;
 }
 
@@ -45,6 +46,8 @@ Shotgun.prototype.sync = function(cb) {
   var that = this;
   if (this.disable) {
     reload(this, cb);
+  } else if (this.local) { // use local data
+    storage.get(this.id, cb);
   } else {
     storage.get(timeAttr(this), function(err, time) {
       var prefix = that.isJsonp ? '&' : '?';
