@@ -43,21 +43,20 @@ Shotgun.clear = _.bind(storage.clear, storage);
  */
 
 Shotgun.prototype.sync = function(cb) {
-  var that = this;
   if (this.disable) {
     reload(this, cb);
   } else if (this.local) { // use local data
     storage.get(this.id, cb);
   } else {
-    storage.get(timeAttr(this), function(err, time) {
-      var prefix = that.isJsonp ? '&' : '?';
+    storage.get(timeAttr(this), _.bind(function(err, time) {
+      var prefix = this.isJsonp ? '&' : '?';
       if (time) {
         // FIXME: indexed#0.6.0 don't use value
-        $.getJSON(that.url + prefix + 't=' + time.value, handleRequest(that, cb));
+        $.getJSON(this.url + prefix + 't=' + time.value, handleRequest(this, cb));
       } else {
-        $.getJSON(that.url, reset(that, cb));
+        $.getJSON(this.url, reset(this, cb));
       }
-    });
+    }, this));
   }
 };
 
